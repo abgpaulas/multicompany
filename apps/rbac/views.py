@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 @login_required
-@require_role('company_admin')
+@login_required
 def role_management(request):
     """Main role management dashboard"""
     # Use company from middleware if available, otherwise fallback to user's company profile
@@ -40,7 +40,7 @@ def role_management(request):
 
 
 @login_required
-@require_role('company_admin')
+@login_required
 def assign_role(request):
     """Assign role to a user"""
     # Use company from middleware if available, otherwise fallback to user's company profile
@@ -94,7 +94,7 @@ def assign_role(request):
 
 
 @login_required
-@require_role('company_admin')
+@login_required
 def revoke_role(request, user_role_id):
     """Revoke a role from a user"""
     # Use company from middleware if available, otherwise fallback to user's company profile
