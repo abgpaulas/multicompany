@@ -17,77 +17,7 @@ class Migration(migrations.Migration):
         # Skip problematic field renames that cause conflicts
         # The user field already exists from previous migrations
         
-        # Add new fields to QuotationTemplate
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="description",
-            field=models.TextField(blank=True, help_text="Description of this template"),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="primary_color",
-            field=models.CharField(default="#1976d2", help_text="Primary color (hex code)", max_length=7),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="secondary_color",
-            field=models.CharField(default="#f8f9fa", help_text="Secondary color (hex code)", max_length=7),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="text_color",
-            field=models.CharField(default="#333333", help_text="Text color (hex code)", max_length=7),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="accent_color",
-            field=models.CharField(default="#e9ecef", help_text="Accent color for borders and highlights (hex code)", max_length=7),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="show_company_logo",
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="show_company_details",
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="show_bank_details",
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="show_signature",
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="document_title",
-            field=models.CharField(default="QUOTATION", help_text="Document title to display", max_length=100),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="number_prefix",
-            field=models.CharField(default="QT", help_text="Quotation number prefix", max_length=10),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="default_terms",
-            field=models.TextField(blank=True, default="This quotation is valid for 30 days from the date of issue", help_text="Default terms for new quotations"),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="footer_text",
-            field=models.TextField(blank=True, help_text="Footer text to display on quotations"),
-        ),
-        migrations.AddField(
-            model_name="quotationtemplate",
-            name="is_default",
-            field=models.BooleanField(default=False, help_text="Use as default template"),
-        ),
+        # Skip adding fields that already exist to avoid conflicts
         
         # Rename Quotation fields
         migrations.RenameField(
@@ -123,22 +53,7 @@ class Migration(migrations.Migration):
         # Skip problematic field renames that cause conflicts
         # The user field already exists from previous migrations
         
-        # Add new fields to Quotation
-        migrations.AddField(
-            model_name="quotation",
-            name="valid_until",
-            field=models.DateField(blank=True, help_text="Quotation validity period", null=True),
-        ),
-        migrations.AddField(
-            model_name="quotation",
-            name="other_charges",
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=12),
-        ),
-        migrations.AddField(
-            model_name="quotation",
-            name="subtotal",
-            field=models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=12),
-        ),
+        # Skip adding fields that already exist to avoid conflicts
         
         # Remove old fields from Quotation
         migrations.RemoveField(
@@ -157,12 +72,7 @@ class Migration(migrations.Migration):
             new_name="line_total",
         ),
         
-        # Add new fields to QuotationItem
-        migrations.AddField(
-            model_name="quotationitem",
-            name="product_service",
-            field=models.CharField(blank=True, help_text="Product or service name", max_length=250),
-        ),
+        # Skip adding fields that already exist to avoid conflicts
         
         # Update field attributes
         migrations.AlterField(
