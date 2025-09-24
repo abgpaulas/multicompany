@@ -41,7 +41,7 @@
                     <p><strong>Total:</strong> {{ product.formatted_total }}</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Created By:</strong> {{ product.created_by.email }}</p>
+                    <p><strong>Created By:</strong> {{ product.created_by.email|default:"Unknown" }}</p>
                     <p><strong>Created Date:</strong> {{ product.date_created|date:"Y-m-d H:i:s" }}</p>
                     <p><strong>Approval Status:</strong> <span class="badge bg-{{ product.approval_status == 'approved' and 'success' or product.approval_status == 'rejected' and 'danger' or 'warning' }}" data-approval-status>{{ product.get_approval_status_display }}</span></p>
                     {% if product.approved_by %}
@@ -80,7 +80,10 @@
             <div class="row mt-3">
                 <div class="col-12">
                     <p><strong>Product Image:</strong></p>
-                    <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid" style="max-width: 300px;">
+                    <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid" style="max-width: 300px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                        <i class="fas fa-image"></i> Product image not found. Please upload a new image.
+                    </div>
                 </div>
             </div>
             {% endif %}

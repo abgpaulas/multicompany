@@ -469,7 +469,8 @@ th:nth-child(22):after {
                         <td>{{ product.job_order }}</td>
                         <td>
                             {% if product.image %}
-                                <img src="{{ product.image.url }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                <img src="{{ product.image.url }}" alt="Product Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <span class="text-muted" style="display: none;">Image not found</span>
                             {% else %}
                                 <span class="text-muted">No image</span>
                             {% endif %}
@@ -539,7 +540,7 @@ th:nth-child(22):after {
                                 </div>
                             {% endif %}
                         </td>
-                        <td>{{ product.created_by.email }}</td>
+                        <td>{{ product.created_by.email|default:"Unknown" }}</td>
                         <td>{{ product.approved_by.email|default:"Not yet approved" }}</td>
                         <td class="production-status-cell" onclick="event.stopPropagation();">
                             <div class="production-status-container">
