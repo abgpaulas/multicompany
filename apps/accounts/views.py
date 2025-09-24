@@ -8,6 +8,7 @@ from django.views.generic import View, TemplateView
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group
+from .forms import UserRegistrationForm
 import json
 
 User = get_user_model()
@@ -26,11 +27,22 @@ class RegisterView(View):
     template_name = 'accounts/register.html'
     
     def get(self, request):
-        return render(request, self.template_name)
+        form = UserRegistrationForm()
+        return render(request, self.template_name, {'form': form})
     
     def post(self, request):
-        # Simple registration logic - you can enhance this later
-        return redirect('accounts:login')
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save()
+                messages.success(request, 'Account created successfully! Please log in.')
+                return redirect('accounts:login')
+            except Exception as e:
+                messages.error(request, f'Error creating account: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+        
+        return render(request, self.template_name, {'form': form})
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
