@@ -184,11 +184,60 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Configure WhiteNoise to serve media files in production
-if not DEBUG:
-    # Enable WhiteNoise to serve media files
-    WHITENOISE_USE_FINDERS = True
-    WHITENOISE_AUTOREFRESH = True
+# Cloud Storage Configuration
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
+USE_CLOUDINARY = os.getenv('USE_CLOUDINARY', 'False').lower() == 'true'
+
+# Cloudinary Configuration
+if USE_CLOUDINARY:
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    
+    cloudinary.config(
+        cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+        api_key=os.getenv('CLOUDINARY_API_KEY'),
+        api_secret=os.getenv('CLOUDINARY_API_SECRET')
+    )
+    
+    # Add Cloudinary to INSTALLED_APPS
+    INSTALLED_APPS += ['cloudinary']
+    
+    # Media files will be handled by Cloudinary
+    MEDIA_URL = '/media/'  # Cloudinary handles the actual URL generation
+    
+elif USE_S3:
+    # AWS S3 settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    
+    # Static files
+    STATICFILES_STORAGE = 'business_app.storage_backends.StaticStorage'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    
+    # Media files
+    DEFAULT_FILE_STORAGE = 'business_app.storage_backends.MediaStorage'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    
+    # Add storages to INSTALLED_APPS
+    INSTALLED_APPS += ['storages']
+else:
+    # Local development settings
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+    
+    # Configure WhiteNoise to serve media files in production
+    if not DEBUG:
+        # Enable WhiteNoise to serve media files
+        WHITENOISE_USE_FINDERS = True
+        WHITENOISE_AUTOREFRESH = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
