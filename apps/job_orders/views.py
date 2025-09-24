@@ -28,6 +28,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import user_passes_test
+from apps.rbac.decorators import require_permission
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 from datetime import datetime, timedelta
@@ -87,7 +88,7 @@ def index(request):
     return render(request, 'dashboard/index.html', context)
 
 @login_required(login_url='auth:login')
-@permission_required('job_orders.can_view_all_jobs', raise_exception=True)
+@require_permission('job_orders.can_view_all_jobs')
 def products(request):
     # Initialize form with user
     form = ProductForm(user=request.user)
@@ -148,7 +149,7 @@ def products(request):
     return render(request, 'job_orders/products.html', context)
 
 @login_required(login_url='auth:login')
-@permission_required('job_orders.can_approve_jobs', raise_exception=True)
+@require_permission('job_orders.can_approve_jobs')
 def approve_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     action = request.POST.get('action')
@@ -176,7 +177,7 @@ def approve_product(request, product_id):
     })
 
 @login_required
-@permission_required('job_orders.can_view_all_jobs', raise_exception=True)
+@require_permission('job_orders.can_view_all_jobs')
 def product_detail(request, pk):
     product = get_object_or_404(Product, id=pk)
     
@@ -205,7 +206,7 @@ def product_detail(request, pk):
     return render(request, 'job_orders/product_detail.html', context)
 
 @login_required
-@permission_required('job_orders.can_view_all_jobs', raise_exception=True)
+@require_permission('job_orders.can_view_all_jobs')
 def product_edit(request, pk):
     product = get_object_or_404(Product, id=pk)
     
@@ -281,7 +282,7 @@ def product_edit(request, pk):
     return render(request, 'job_orders/product_edit.html', context)
 
 @login_required
-@permission_required('job_orders.can_view_all_jobs', raise_exception=True)
+@require_permission('job_orders.can_view_all_jobs')
 def product_delete(request, pk):
     product = get_object_or_404(Product, id=pk)
     
@@ -315,7 +316,7 @@ def product_view(request, job_id):
     return render(request, 'job_orders/product_view.html', context)
 
 @login_required
-@permission_required('job_orders.can_export_products', raise_exception=True)
+@require_permission('job_orders.can_export_products')
 def export_products_pdf(request):
     products = Product.objects.all().order_by('-date_created')
     
@@ -348,7 +349,7 @@ def export_products_pdf(request):
     return response
 
 @login_required
-@permission_required('job_orders.can_export_products', raise_exception=True)
+@require_permission('job_orders.can_export_products')
 def export_single_product_pdf(request, job_id):
     try:
         product = Product.objects.get(job_order=job_id)
@@ -371,7 +372,7 @@ def export_single_product_pdf(request, job_id):
     return response
 
 @login_required
-@permission_required('job_orders.can_export_products', raise_exception=True)
+@require_permission('job_orders.can_export_products')
 def export_product_view_pdf(request, job_id):
     try:
         product = Product.objects.get(job_order=job_id)
@@ -394,7 +395,7 @@ def export_product_view_pdf(request, job_id):
     return response
 
 @login_required
-@permission_required('job_orders.can_manage_production', raise_exception=True)
+@require_permission('job_orders.can_manage_production')
 def update_production_status(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
@@ -418,7 +419,7 @@ def update_production_status(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @login_required
-@permission_required('job_orders.can_manage_production', raise_exception=True)
+@require_permission('job_orders.can_manage_production')
 def delete_status_history(request, history_id):
     try:
         history = ProductStatusHistory.objects.get(id=history_id)
@@ -432,7 +433,7 @@ def delete_status_history(request, history_id):
         return JsonResponse({'success': False, 'message': 'Status update not found'})
 
 @login_required
-@permission_required('job_orders.can_manage_production', raise_exception=True)
+@require_permission('job_orders.can_manage_production')
 def edit_status_history(request, history_id):
     if request.method == 'POST':
         try:
