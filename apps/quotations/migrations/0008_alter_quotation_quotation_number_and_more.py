@@ -17,8 +17,9 @@ class Migration(migrations.Migration):
             name='quotation_number',
             field=models.CharField(editable=False, max_length=50),
         ),
-        migrations.AlterUniqueTogether(
-            name='quotation',
-            unique_together={('user', 'quotation_number')},
-        ),
+        # Skip unique constraint that references non-existent user field
+        # migrations.AlterUniqueTogether(
+        #     name='quotation',
+        #     unique_together={('user', 'quotation_number')},
+        # ),
     ]
