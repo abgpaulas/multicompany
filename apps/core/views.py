@@ -70,6 +70,11 @@ def company_profile_view(request):
                 messages.success(request, 'Company profile updated successfully!')
             
             return redirect('core:dashboard')
+        else:
+            # Add form errors to messages for debugging
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
     else:
         form = CompanyProfileForm(instance=company_profile)
     
