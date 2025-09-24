@@ -83,7 +83,9 @@ class CompanyContextMiddleware(MiddlewareMixin):
                 return None
             
             # Check if user has a company profile
-            if not hasattr(request.user, 'company_profile'):
+            try:
+                company_profile = request.user.company_profile
+            except Exception:
                 # Redirect to company setup if no company profile
                 try:
                     messages.warning(
