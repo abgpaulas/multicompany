@@ -97,7 +97,7 @@
                         <tr><td><strong>Contact:</strong></td><td>{{ product.contact_number }}</td></tr>
                         <tr><td><strong>Created By:</strong></td><td>{{ product.created_by.email|default:"Unknown" }}</td></tr>
                         <tr><td><strong>Created Date:</strong></td><td>{{ product.date_created|date:"Y-m-d H:i:s" }}</td></tr>
-                        <tr><td><strong>Status:</strong></td><td><span class="badge bg-{{ product.approval_status == 'approved' and 'success' or product.approval_status == 'rejected' and 'danger' or 'warning' }}" data-approval-status>{{ product.get_approval_status_display }}</span></td></tr>
+                        <tr><td><strong>Status:</strong></td><td><span class="badge {% if product.approval_status == 'approved' %}bg-success{% elif product.approval_status == 'rejected' %}bg-danger{% else %}bg-warning{% endif %}" data-approval-status>{{ product.get_approval_status_display }}</span></td></tr>
                     </table>
                 </div>
             </div>

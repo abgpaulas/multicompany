@@ -43,7 +43,11 @@
                 <div class="col-md-6">
                     <p><strong>Created By:</strong> {{ product.created_by.email|default:"Unknown" }}</p>
                     <p><strong>Created Date:</strong> {{ product.date_created|date:"Y-m-d H:i:s" }}</p>
-                    <p><strong>Approval Status:</strong> <span class="badge bg-{{ product.approval_status == 'approved' and 'success' or product.approval_status == 'rejected' and 'danger' or 'warning' }}" data-approval-status>{{ product.get_approval_status_display }}</span></p>
+                    <p><strong>Approval Status:</strong> 
+                        <span class="badge {% if product.approval_status == 'approved' %}bg-success{% elif product.approval_status == 'rejected' %}bg-danger{% else %}bg-warning{% endif %}" data-approval-status>
+                            {{ product.get_approval_status_display }}
+                        </span>
+                    </p>
                     {% if product.approved_by %}
                         <p><strong>Approved By:</strong> <span data-approved-by>{{ product.approved_by.email }}</span></p>
                     {% endif %}
