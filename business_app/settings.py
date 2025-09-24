@@ -184,6 +184,12 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Configure WhiteNoise to serve media files in production
+if not DEBUG:
+    # Enable WhiteNoise to serve media files
+    WHITENOISE_USE_FINDERS = True
+    WHITENOISE_AUTOREFRESH = True
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -64,8 +64,35 @@ def company_profile_view(request):
             company_profile.user = request.user
             company_profile.save()
             
+            # Auto-assign company_admin role when company profile is created
             if created:
-                messages.success(request, 'Company profile created successfully!')
+                try:
+                    from apps.rbac.models import Role, UserRole
+                    from apps.rbac.managers import RoleManager
+                    
+                    # Create default roles if they don't exist
+                    RoleManager.create_default_roles()
+                    
+                    # Get or create company_admin role
+                    company_admin_role = Role.objects.get(role_type='company_admin')
+                    
+                    # Assign role to user if not already assigned
+                    if not UserRole.objects.filter(user=request.user, company=company_profile, role=company_admin_role).exists():
+                        UserRole.objects.create(
+                            user=request.user,
+                            company=company_profile,
+                            role=company_admin_role,
+                            assigned_by=request.user,
+                            is_active=True
+                        )
+                        messages.success(request, 'Company profile created successfully! You have been assigned Company Admin role.')
+                    else:
+                        messages.success(request, 'Company profile created successfully!')
+                        
+                except Exception as e:
+                    # If role assignment fails, still show success for profile creation
+                    messages.success(request, 'Company profile created successfully!')
+                    messages.warning(request, 'Note: Please contact administrator to assign proper roles for full access.')
             else:
                 messages.success(request, 'Company profile updated successfully!')
             
