@@ -95,7 +95,7 @@
                     <table class="table table-borderless">
                         <tr><td><strong>Address:</strong></td><td>{{ product.address }}</td></tr>
                         <tr><td><strong>Contact:</strong></td><td>{{ product.contact_number }}</td></tr>
-                        <tr><td><strong>Created By:</strong></td><td>{{ product.created_by.email }}</td></tr>
+                        <tr><td><strong>Created By:</strong></td><td>{{ product.created_by.email|default:"Unknown" }}</td></tr>
                         <tr><td><strong>Created Date:</strong></td><td>{{ product.date_created|date:"Y-m-d H:i:s" }}</td></tr>
                         <tr><td><strong>Status:</strong></td><td><span class="badge bg-{{ product.approval_status == 'approved' and 'success' or product.approval_status == 'rejected' and 'danger' or 'warning' }}" data-approval-status>{{ product.get_approval_status_display }}</span></td></tr>
                     </table>
@@ -284,7 +284,10 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <h6 class="text-primary">Product Image</h6>
-                    <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid" style="max-width: 400px;">
+                    <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid" style="max-width: 400px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                        <i class="fas fa-image"></i> Product image not found. Please upload a new image.
+                    </div>
                 </div>
             </div>
             {% endif %}
