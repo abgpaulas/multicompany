@@ -85,21 +85,13 @@ class Migration(migrations.Migration):
             name="quotation_date",
             field=models.DateField(auto_now_add=True),
         ),
-        migrations.AlterField(
-            model_name="quotation",
-            name="user",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="quotations", to=settings.AUTH_USER_MODEL),
-        ),
+        # Skip altering user field that doesn't exist
         migrations.AlterField(
             model_name="quotation",
             name="client",
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="quotations", to="clients.client"),
         ),
-        migrations.AlterField(
-            model_name="quotationtemplate",
-            name="user",
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="quotation_templates", to=settings.AUTH_USER_MODEL),
-        ),
+        # Skip altering user field that doesn't exist
         migrations.AlterField(
             model_name="quotationitem",
             name="description",
@@ -117,10 +109,7 @@ class Migration(migrations.Migration):
         ),
         
         # Add indexes
-        migrations.AddIndex(
-            model_name="quotation",
-            index=models.Index(fields=["user", "-created_at"], name="quotations__user_id_created_at_idx"),
-        ),
+        # Skip index that references non-existent user field
         migrations.AddIndex(
             model_name="quotation",
             index=models.Index(fields=["quotation_number"], name="quotations__quotation_number_idx"),
@@ -157,8 +146,5 @@ class Migration(migrations.Migration):
         ),
         
         # Add unique constraints
-        migrations.AlterUniqueTogether(
-            name="quotationtemplate",
-            unique_together={("user", "name")},
-        ),
+        # Skip unique constraint that references non-existent user field
     ]
