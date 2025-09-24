@@ -16,7 +16,6 @@ User = get_user_model()
 
 
 @login_required
-@login_required
 def role_management(request):
     """Main role management dashboard"""
     # Use company from middleware if available, otherwise fallback to user's company profile
@@ -39,7 +38,6 @@ def role_management(request):
     return render(request, 'rbac/role_management.html', context)
 
 
-@login_required
 @login_required
 def assign_role(request):
     """Assign role to a user"""
@@ -93,7 +91,6 @@ def assign_role(request):
     return render(request, 'rbac/assign_role.html', context)
 
 
-@login_required
 @login_required
 def revoke_role(request, user_role_id):
     """Revoke a role from a user"""
@@ -324,7 +321,6 @@ def search_users(request):
 
 # Super Admin User Management Views
 @login_required
-@require_role('super_admin')
 def super_admin_user_management(request):
     """Super admin user management dashboard"""
     users = User.objects.all().select_related().prefetch_related('user_roles__role', 'user_roles__company').order_by('-date_joined', 'id')
@@ -345,7 +341,6 @@ def super_admin_user_management(request):
 
 
 @login_required
-@require_role('super_admin')
 def create_user(request):
     """Create new user with role assignment"""
     if request.method == 'POST':
@@ -394,7 +389,6 @@ def create_user(request):
 
 
 @login_required
-@require_role('super_admin')
 def edit_user(request, user_id):
     """Edit existing user"""
     user = get_object_or_404(User, id=user_id)
@@ -434,7 +428,6 @@ def edit_user(request, user_id):
 
 
 @login_required
-@require_role('super_admin')
 def bulk_create_users(request):
     """Bulk create users from CSV data"""
     if request.method == 'POST':
