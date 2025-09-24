@@ -9,7 +9,7 @@ import json
 from .models import CompanyProfile, BankAccount
 from .forms import CompanyProfileForm, BankAccountForm
 from .utils import get_currency_info
-from apps.rbac.decorators import require_permission, require_role
+# Removed RBAC decorators - using simple login_required instead
 
 
 def landing_page(request, **kwargs):
@@ -115,7 +115,6 @@ def company_profile_view(request):
 
 
 @login_required
-@require_permission('core.view_companyprofile')
 def bank_accounts_view(request):
     """Bank accounts management view"""
     # Use company from middleware if available, otherwise fallback to user's company profile
@@ -166,7 +165,6 @@ def bank_accounts_view(request):
 
 
 @login_required
-@require_permission('core.change_companyprofile')
 def edit_bank_account(request, pk):
     """Edit bank account"""
     bank_account = get_object_or_404(BankAccount, pk=pk, company__user=request.user)
@@ -190,7 +188,6 @@ def edit_bank_account(request, pk):
 
 
 @login_required
-@require_permission('core.delete_companyprofile')
 def delete_bank_account(request, pk):
     """Delete bank account"""
     bank_account = get_object_or_404(BankAccount, pk=pk, company__user=request.user)

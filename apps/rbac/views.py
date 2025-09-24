@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from apps.core.models import CompanyProfile
 from .models import Role, UserRole
 from .managers import UserRoleManager, PermissionChecker
-from .decorators import require_permission, require_role, api_permission_required
+# Removed RBAC decorators - using simple login_required instead
 from .forms import UserRoleAssignmentForm, RoleForm, SuperAdminUserCreationForm, UserEditForm, BulkUserCreationForm
 
 User = get_user_model()
@@ -125,7 +125,6 @@ def revoke_role(request, user_role_id):
 
 
 @login_required
-@require_permission('rbac.view_role')
 def role_list(request):
     """List all available roles"""
     roles = Role.objects.filter(is_active=True).prefetch_related('permissions')
@@ -138,7 +137,6 @@ def role_list(request):
 
 
 @login_required
-@require_permission('rbac.view_userrole')
 def user_role_history(request, user_id):
     """View role history for a specific user"""
     user = get_object_or_404(User, id=user_id)
@@ -172,7 +170,7 @@ def my_permissions(request):
 
 
 # API Views
-@api_permission_required('rbac.view_userrole')
+@login_required
 def api_user_roles(request):
     """API endpoint to get user roles"""
     # Use company from middleware if available, otherwise fallback to user's company profile
@@ -203,7 +201,7 @@ def api_user_roles(request):
     return JsonResponse({'data': data})
 
 
-@api_permission_required('rbac.add_userrole')
+@login_required
 @require_http_methods(["POST"])
 def api_assign_role(request):
     """API endpoint to assign role"""
@@ -246,7 +244,7 @@ def api_assign_role(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 
-@api_permission_required('rbac.delete_userrole')
+@login_required
 @require_http_methods(["POST"])
 def api_revoke_role(request, user_role_id):
     """API endpoint to revoke role"""
@@ -274,7 +272,7 @@ def api_revoke_role(request, user_role_id):
         return JsonResponse({'error': str(e)}, status=400)
 
 
-@api_permission_required('rbac.view_role')
+@login_required
 def api_roles(request):
     """API endpoint to get available roles"""
     roles = Role.objects.filter(is_active=True)
@@ -521,7 +519,7 @@ def bulk_create_users(request):
 
 
 # API Views for Super Admin
-@api_permission_required('rbac.add_user')
+@login_required
 @require_http_methods(["POST"])
 def api_create_user(request):
     """API endpoint to create user"""
@@ -566,7 +564,7 @@ def api_create_user(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 
-@api_permission_required('rbac.change_user')
+@login_required
 @require_http_methods(["POST"])
 def api_edit_user(request, user_id):
     """API endpoint to edit user"""
@@ -600,7 +598,7 @@ def api_edit_user(request, user_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 
-@api_permission_required('rbac.view_user')
+@login_required
 def api_users_list(request):
     """API endpoint to get users list with pagination"""
     users = User.objects.all().select_related().prefetch_related('user_roles__role', 'user_roles__company').order_by('-date_joined', 'id')
@@ -649,7 +647,7 @@ def api_users_list(request):
     })
 
 
-@api_permission_required('rbac.delete_user')
+@login_required
 @require_http_methods(["POST"])
 def api_delete_user(request, user_id):
     """API endpoint to delete user"""
