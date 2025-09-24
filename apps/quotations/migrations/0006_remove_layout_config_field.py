@@ -11,36 +11,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__user_id_57ceb1_idx",
-            old_name="quotations__user_id_created_at_idx",
-        ),
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__quotati_d2f33a_idx",
-            old_name="quotations__quotation_number_idx",
-        ),
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__status_2435f4_idx",
-            old_name="quotations__status_idx",
-        ),
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__quotati_eaed53_idx",
-            old_name="quotations__quotation_date_idx",
-        ),
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__valid_u_5c5317_idx",
-            old_name="quotations__valid_until_idx",
-        ),
-        migrations.RenameIndex(
-            model_name="quotation",
-            new_name="quotations__client__bb8ebd_idx",
-            old_name="quotations__client_id_idx",
-        ),
+        # Skip index renames that reference non-existent indexes
         migrations.RemoveField(
             model_name="quotationtemplate",
             name="branding",
