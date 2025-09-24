@@ -85,21 +85,29 @@ class CompanyContextMiddleware(MiddlewareMixin):
             if not hasattr(request.user, 'company_profile'):
                 # Redirect to company setup if no company profile
                 if request.path != '/core/company-profile/':
-                    messages.warning(
-                        request, 
-                        'You need to set up your company profile to access this application.'
-                    )
+                    try:
+                        messages.warning(
+                            request, 
+                            'You need to set up your company profile to access this application.'
+                        )
+                    except Exception:
+                        # Fallback if messages middleware is not available
+                        pass
                     return redirect('core:company_profile')
             
             # Check if user has any active roles
             elif hasattr(request, 'user_roles') and not request.user_roles:
                 # User has company but no roles - they might need to be assigned roles
                 if request.path not in ['/core/company-profile/', '/auth/logout/']:
-                    messages.warning(
-                        request,
-                        'You have been registered but no roles have been assigned yet. '
-                        'Please contact your administrator.'
-                    )
+                    try:
+                        messages.warning(
+                            request,
+                            'You have been registered but no roles have been assigned yet. '
+                            'Please contact your administrator.'
+                        )
+                    except Exception:
+                        # Fallback if messages middleware is not available
+                        pass
                     return redirect('core:company_profile')
         
         return None
