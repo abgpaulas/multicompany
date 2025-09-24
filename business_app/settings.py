@@ -114,6 +114,8 @@ if config('DATABASE_URL', default=''):
     DATABASES = {
         'default': dj_database_url.parse(config('DATABASE_URL'))
     }
+    # Use psycopg3 for better Python 3.13 compatibility
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
 else:
     DATABASES = {
         'default': {
