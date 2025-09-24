@@ -136,10 +136,17 @@ class InvoiceAdmin(admin.ModelAdmin):
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
 
-# Create groups
-product_manager_group, created = Group.objects.get_or_create(name='Product Managers')
-product_viewer_group, created = Group.objects.get_or_create(name='Product Viewers')
-product_approver_group, created = Group.objects.get_or_create(name='Product Approvers')
+# Create groups - moved to signal to avoid running during startup
+def create_groups():
+    """Create groups if they don't exist"""
+    try:
+        product_manager_group, created = Group.objects.get_or_create(name='Product Managers')
+        product_viewer_group, created = Group.objects.get_or_create(name='Product Viewers')
+        product_approver_group, created = Group.objects.get_or_create(name='Product Approvers')
+        return product_manager_group, product_viewer_group, product_approver_group
+    except Exception:
+        # Database not ready yet, skip group creation
+        return None, None, None
 
 product_manager_permissions = [
     'can_view_all_jobs',
