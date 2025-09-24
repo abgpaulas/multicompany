@@ -8,7 +8,7 @@ from django.views.generic import View, TemplateView
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserProfileForm
 import json
 
 User = get_user_model()
@@ -52,17 +52,67 @@ class CustomPasswordResetView(PasswordResetView):
 # Profile Views
 @login_required
 def profile_view(request):
-    return render(request, 'accounts/profile.html')
+    """View user profile with form for editing"""
+    form = UserProfileForm(instance=request.user)
+    context = {
+        'form': form,
+        'user': request.user,
+    }
+    return render(request, 'accounts/profile.html', context)
 
 class ProfileEditView(View):
     template_name = 'accounts/profile_edit.html'
     
     def get(self, request):
-        return render(request, self.template_name)
+        """Display profile edit form"""
+        form = UserProfileForm(instance=request.user)
+        context = {
+            'form': form,
+            'user': request.user,
+        }
+        return render(request, self.template_name, context)
     
     def post(self, request):
-        # Simple profile edit logic - you can enhance this later
-        return redirect('accounts:profile')
+        """Handle profile update with AJAX support"""
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        
+        if form.is_valid():
+            form.save()
+            
+            # Handle AJAX requests
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Profile updated successfully!',
+                    'user': {
+                        'first_name': request.user.first_name,
+                        'last_name': request.user.last_name,
+                        'email': request.user.email,
+                        'phone': request.user.phone,
+                        'location': request.user.location,
+                        'website': request.user.website,
+                        'bio': request.user.bio,
+                        'profile_picture_url': request.user.profile_picture.url if request.user.profile_picture else None,
+                    }
+                })
+            
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('accounts:profile')
+        else:
+            # Handle AJAX requests with errors
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Please correct the errors below.',
+                    'errors': form.errors
+                }, status=400)
+            
+            # For regular form submission, re-render with errors
+            context = {
+                'form': form,
+                'user': request.user,
+            }
+            return render(request, self.template_name, context)
 
 @login_required
 def dashboard(request):
