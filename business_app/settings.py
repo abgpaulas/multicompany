@@ -187,6 +187,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Cloud Storage Configuration
 USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 USE_CLOUDINARY = os.getenv('USE_CLOUDINARY', 'False').lower() == 'true'
+USE_GITHUB = os.getenv('USE_GITHUB', 'False').lower() == 'true'
 
 # Cloudinary Configuration
 if USE_CLOUDINARY:
@@ -205,6 +206,12 @@ if USE_CLOUDINARY:
     
     # Media files will be handled by Cloudinary
     MEDIA_URL = '/media/'  # Cloudinary handles the actual URL generation
+
+# GitHub Storage Configuration (FREE!)
+elif USE_GITHUB:
+    # Use GitHub repository as file storage - completely free!
+    DEFAULT_FILE_STORAGE = 'business_app.github_storage.GitHubStorage'
+    # Files will be stored in your GitHub repository and served via raw.githubusercontent.com
     
 elif USE_S3:
     # AWS S3 settings
