@@ -84,7 +84,7 @@ class CompanyContextMiddleware(MiddlewareMixin):
             # Check if user has a company profile
             if not hasattr(request.user, 'company_profile'):
                 # Redirect to company setup if no company profile
-                if request.path != '/core/company-profile/':
+                if request.path not in ['/dashboard/company-profile/', '/core/company-profile/']:
                     try:
                         messages.warning(
                             request, 
@@ -98,7 +98,7 @@ class CompanyContextMiddleware(MiddlewareMixin):
             # Check if user has any active roles
             elif hasattr(request, 'user_roles') and not request.user_roles:
                 # User has company but no roles - they might need to be assigned roles
-                if request.path not in ['/core/company-profile/', '/auth/logout/']:
+                if request.path not in ['/dashboard/company-profile/', '/core/company-profile/', '/auth/logout/']:
                     try:
                         messages.warning(
                             request,
