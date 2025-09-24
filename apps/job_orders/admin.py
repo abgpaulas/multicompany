@@ -136,7 +136,7 @@ class InvoiceAdmin(admin.ModelAdmin):
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
 
-# Create groups - moved to signal to avoid running during startup
+# Create groups - moved to function to avoid running during startup
 def create_groups():
     """Create groups if they don't exist"""
     try:
