@@ -242,8 +242,8 @@ def get_company_context(user):
         company_profile = user.company_profile
         return {
             'company_profile': company_profile,
-            'company_logo': company_profile.logo.url if company_profile.logo else None,
-            'company_signature': company_profile.signature.url if company_profile.signature else None,
+            'company_logo': company_profile.logo.url if company_profile.logo and company_profile.logo.name else None,
+            'company_signature': company_profile.signature.url if company_profile.signature and company_profile.signature.name else None,
             'currency_symbol': company_profile.currency_symbol,
             'currency_code': company_profile.currency_code,
         }
