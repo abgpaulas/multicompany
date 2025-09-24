@@ -46,4 +46,8 @@ urlpatterns = [
     
     # Debug view
     path('debug-auth/', views.debug_auth_view, name='debug_auth'),
+    
+    # Admin creation endpoints
+    path('create-admin/', views.create_first_admin, name='create_first_admin'),
+    path('check-admin/', views.check_admin_exists, name='check_admin_exists'),
 ]

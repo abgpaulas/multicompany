@@ -25,6 +25,7 @@ ALLOWED_HOSTS = [
     'testserver',
     '.railway.app',  # Railway default domain
     '.up.railway.app',  # Railway alternative domain
+    '.onrender.com',  # Render default domain
 ]
 
 # Add Railway domain if available
