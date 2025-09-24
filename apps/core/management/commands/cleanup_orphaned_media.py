@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from apps.core.models import CompanyProfile
+from apps.accounts.models import User
+from apps.job_orders.models import Product
 import os
 
 
@@ -42,6 +44,28 @@ class Command(BaseCommand):
                     if not dry_run:
                         profile.signature = None
                         profile.save(update_fields=['signature'])
+                    cleaned_count += 1
+        
+        # Check user profile pictures
+        for user in User.objects.filter(profile_picture__isnull=False):
+            if user.profile_picture and user.profile_picture.name:
+                profile_path = os.path.join(settings.MEDIA_ROOT, user.profile_picture.name)
+                if not os.path.exists(profile_path):
+                    self.stdout.write(f'Found orphaned profile picture: {user.profile_picture.name} for user {user.email}')
+                    if not dry_run:
+                        user.profile_picture = None
+                        user.save(update_fields=['profile_picture'])
+                    cleaned_count += 1
+        
+        # Check product images
+        for product in Product.objects.filter(image__isnull=False):
+            if product.image and product.image.name:
+                image_path = os.path.join(settings.MEDIA_ROOT, product.image.name)
+                if not os.path.exists(image_path):
+                    self.stdout.write(f'Found orphaned product image: {product.image.name} for product {product.job_order}')
+                    if not dry_run:
+                        product.image = None
+                        product.save(update_fields=['image'])
                     cleaned_count += 1
         
         if dry_run:
