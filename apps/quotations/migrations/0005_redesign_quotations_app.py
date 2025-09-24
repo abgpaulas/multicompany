@@ -14,17 +14,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Rename QuotationTemplate fields
-        migrations.RenameField(
-            model_name="quotationtemplate",
-            old_name="company",
-            new_name="user",
-        ),
-        migrations.RenameField(
-            model_name="quotationtemplate",
-            old_name="created_by",
-            new_name="user",
-        ),
+        # Skip problematic field renames that cause conflicts
+        # The user field already exists from previous migrations
         
         # Add new fields to QuotationTemplate
         migrations.AddField(
@@ -129,16 +120,8 @@ class Migration(migrations.Migration):
             old_name="total",
             new_name="grand_total",
         ),
-        migrations.RenameField(
-            model_name="quotation",
-            old_name="company",
-            new_name="user",
-        ),
-        migrations.RenameField(
-            model_name="quotation",
-            old_name="created_by",
-            new_name="user",
-        ),
+        # Skip problematic field renames that cause conflicts
+        # The user field already exists from previous migrations
         
         # Add new fields to Quotation
         migrations.AddField(
