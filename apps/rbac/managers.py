@@ -246,16 +246,83 @@ class PermissionChecker:
         if user.has_perm(permission):
             return True
         
-        # Check company-specific permissions
+        # Check company-specific permissions via RBAC
         if company:
             user_roles = UserRoleManager.get_user_roles(user, company)
             for user_role in user_roles:
                 if user_role.is_expired():
                     continue
+                
+                # Special handling for company_admin role - grant all permissions
+                if user_role.role.role_type == 'company_admin':
+                    return True
+                
+                # Check if role has this specific permission
                 if user_role.role.permissions.filter(codename=permission.split('.')[-1]).exists():
+                    return True
+                
+                # Check for app-level wildcard permissions (e.g., 'job_orders.*')
+                app_label = permission.split('.')[0]
+                
+                # Check if role has any permissions for this app (indicating wildcard access)
+                app_permissions = user_role.role.permissions.filter(content_type__app_label=app_label)
+                if app_permissions.exists():
                     return True
         
         return False
+    
+    @staticmethod
+    def get_custom_permissions_for_app(app_label):
+        """Get custom permissions for an app that should be granted to wildcard roles"""
+        custom_permissions = {
+            'job_orders': [
+                'can_view_all_jobs',
+                'can_approve_jobs', 
+                'can_export_jobs',
+                'can_manage_production',
+                'can_export_products',
+                'can_export_leaves',
+                'view_dashboard',
+                'manage_leave'
+            ],
+            'invoices': [
+                'view_invoice',
+                'add_invoice',
+                'change_invoice',
+                'delete_invoice'
+            ],
+            'quotations': [
+                'view_quotation',
+                'add_quotation', 
+                'change_quotation',
+                'delete_quotation'
+            ],
+            'waybills': [
+                'view_waybill',
+                'add_waybill',
+                'change_waybill', 
+                'delete_waybill'
+            ],
+            'receipts': [
+                'view_receipt',
+                'add_receipt',
+                'change_receipt',
+                'delete_receipt'
+            ],
+            'clients': [
+                'view_client',
+                'add_client',
+                'change_client',
+                'delete_client'
+            ],
+            'inventory': [
+                'view_product',
+                'add_product',
+                'change_product',
+                'delete_product'
+            ]
+        }
+        return custom_permissions.get(app_label, [])
     
     @staticmethod
     def has_role(user, role_type, company=None):
