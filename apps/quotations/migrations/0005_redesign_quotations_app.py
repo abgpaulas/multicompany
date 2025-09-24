@@ -122,10 +122,7 @@ class Migration(migrations.Migration):
             model_name="quotation",
             index=models.Index(fields=["quotation_date"], name="quotations__quotation_date_idx"),
         ),
-        migrations.AddIndex(
-            model_name="quotation",
-            index=models.Index(fields=["valid_until"], name="quotations__valid_until_idx"),
-        ),
+        # Skip index that references non-existent valid_until field
         migrations.AddIndex(
             model_name="quotation",
             index=models.Index(fields=["client"], name="quotations__client_id_idx"),
