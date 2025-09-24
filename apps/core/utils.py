@@ -242,8 +242,8 @@ def get_company_context(user):
         company_profile = user.company_profile
         return {
             'company_profile': company_profile,
-            'company_logo': company_profile.logo.url if company_profile.logo and company_profile.logo.name else None,
-            'company_signature': company_profile.signature.url if company_profile.signature and company_profile.signature.name else None,
+            'company_logo': get_safe_media_url(company_profile.logo),
+            'company_signature': get_safe_media_url(company_profile.signature),
             'currency_symbol': company_profile.currency_symbol,
             'currency_code': company_profile.currency_code,
         }
@@ -255,6 +255,24 @@ def get_company_context(user):
             'currency_symbol': '$',
             'currency_code': 'USD',
         }
+
+def get_safe_media_url(media_field):
+    """Safely get media URL, return None if file doesn't exist"""
+    if not media_field:
+        return None
+    
+    try:
+        # Check if the file actually exists
+        if hasattr(media_field, 'path') and os.path.exists(media_field.path):
+            return media_field.url
+        elif hasattr(media_field, 'name') and media_field.name:
+            # For production environments, we can't always check file existence
+            # Return the URL if the field has a name, but this might still 404
+            return media_field.url
+        else:
+            return None
+    except Exception:
+        return None
 
 
 def calculate_percentage(amount, percentage):

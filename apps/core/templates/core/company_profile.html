@@ -133,7 +133,11 @@
                                             <img src="{{ company_profile.logo.url }}" 
                                                  alt="Current Logo" 
                                                  class="img-thumbnail" 
-                                                 style="max-width: 150px; max-height: 100px;">
+                                                 style="max-width: 150px; max-height: 100px;"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                                                <i class="fas fa-image"></i> Logo file not found. Please upload a new one.
+                                            </div>
                                         </div>
                                     {% endif %}
                                     {{ form.logo }}
@@ -157,7 +161,11 @@
                                             <img src="{{ company_profile.signature.url }}" 
                                                  alt="Current Signature" 
                                                  class="img-thumbnail" 
-                                                 style="max-width: 150px; max-height: 100px;">
+                                                 style="max-width: 150px; max-height: 100px;"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                                                <i class="fas fa-signature"></i> Signature file not found. Please upload a new one.
+                                            </div>
                                         </div>
                                     {% endif %}
                                     {{ form.signature }}

@@ -369,7 +369,11 @@
 
             <div class="header"> <!-- Header section of the receipt -->
                 <div class="logo"> <!-- Container for the logo -->
-                    <img src="pics/logo34.png" alt="Logo" id="logoDisplay"> <!-- Placeholder for the company logo -->
+                    {% if company_logo %}
+                        <img src="{{ company_logo }}" alt="Logo" id="logoDisplay">
+                    {% else %}
+                        <img src="{% static 'img/logo-ct.png' %}" alt="Logo" id="logoDisplay">
+                    {% endif %}
                 </div>
                 <div class="company-info"> <!-- Container for the company information -->
                     <h1 id="companyNameDisplay">Type Your Company Name here...</h1> <!-- Displays the company name -->
@@ -434,7 +438,11 @@
            
             <div class="signature"> <!-- Section for displaying a signature -->
                 <div class="sign-box"> <!-- Container for the signature box -->
-                    <img src="pics/david.png" alt="Signature" id="signatureDisplay"> <!-- Placeholder for the signature image -->
+                    {% if company_signature %}
+                        <img src="{{ company_signature }}" alt="Signature" id="signatureDisplay">
+                    {% else %}
+                        <div class="signature-placeholder">Authorized Signature</div>
+                    {% endif %}
                 </div>
             </div>
 
