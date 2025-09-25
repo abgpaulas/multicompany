@@ -15,9 +15,10 @@ class GitHubStorage(Storage):
     """
     
     def __init__(self):
-        self.github_token = os.getenv('GITHUB_TOKEN')
-        self.repo_name = os.getenv('GITHUB_REPO_NAME', 'abgpaulas/multicompany')
-        self.branch = os.getenv('GITHUB_BRANCH', 'master')
+        from decouple import config
+        self.github_token = config('GITHUB_TOKEN', default='')
+        self.repo_name = config('GITHUB_REPO_NAME', default='abgpaulas/multicompany')
+        self.branch = config('GITHUB_BRANCH', default='master')
         
         if self.github_token:
             try:
