@@ -352,9 +352,9 @@ body {
           <div class="invoice-header">
             <div class="company-logo">
               {% if company_logo %}
-                <img src="{{ company_logo }}" alt="Company Logo">
+                <img src="{{ company_logo|cache_bust }}" alt="Company Logo">
               {% else %}
-                <img src="{% static 'img/logo-ct.png' %}" alt="Company Logo">
+                <img src="{% static 'img/logo-ct.png' }}" alt="Company Logo">
               {% endif %}
             </div>
             <div class="company-details">
@@ -458,7 +458,7 @@ body {
           <!-- Signature Section -->
           {% if company_signature %}
           <div class="signature-section">
-            <img src="{{ company_signature }}" alt="Signature">
+            <img src="{{ company_signature|cache_bust }}" alt="Signature">
             <p><strong>Authorized Signature</strong></p>
           </div>
           {% endif %}

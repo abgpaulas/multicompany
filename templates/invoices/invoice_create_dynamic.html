@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 
 {% block title %}{{ title }} - Multi-Purpose Business App{% endblock %}
 {% block page_title %}{{ title }}{% endblock %}
@@ -1123,7 +1124,7 @@
                                     <div class="invoice-header">
                                         <div class="company-logo">
                                             {% if company_logo %}
-                                            <img src="{{ company_logo }}" alt="Company Logo" id="preview-logo">
+                                            <img src="{{ company_logo|cache_bust }}" alt="Company Logo" id="preview-logo">
                                             {% else %}
                                             <img src="{% static 'img/logo-ct.png' %}" alt="Company Logo"
                                                 id="preview-logo">
@@ -1219,7 +1220,7 @@
                                     <!-- Signature Section -->
                                     <div class="signature-section" style="margin-top: 30px;" id="signature-preview">
                                         {% if company_signature %}
-                                        <img src="{{ company_signature }}" alt="Signature" id="preview-signature">
+                                        <img src="{{ company_signature|cache_bust }}" alt="Signature" id="preview-signature">
                                         <p><strong>Authorized Signature</strong></p>
                                         {% else %}
                                         <div style="border-top: 1px solid #333; width: 250px; margin: 0 auto; padding-top: 10px;">

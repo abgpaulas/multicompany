@@ -159,7 +159,7 @@
                                     </label>
                                     {% if company_profile.signature %}
                                         <div class="mb-2">
-                                            <img src="{{ company_profile.signature.url }}" 
+                                            <img src="{{ company_profile.signature.url|cache_bust }}" 
                                                  alt="Current Signature" 
                                                  class="img-thumbnail" 
                                                  style="max-width: 150px; max-height: 100px;"

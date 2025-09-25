@@ -1,5 +1,6 @@
 {% extends 'base_print.html' %}
 {% load static %}
+{% load media_utils %}
 {% load currency_filters %}
 
 <!DOCTYPE html>
@@ -173,7 +174,7 @@
     <!-- Header -->
     <div class="header">
         {% if company_logo %}
-            <img src="{{ company_logo }}" alt="Company Logo" class="company-logo">
+            <img src="{{ company_logo|cache_bust }}" alt="Company Logo" class="company-logo">
         {% endif %}
         <div class="company-name">{{ company_profile.company_name }}</div>
         <div class="company-details">

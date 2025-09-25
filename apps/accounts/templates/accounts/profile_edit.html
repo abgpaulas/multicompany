@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load media_utils %}
 
 {% block title %}Edit Profile - {{ user.get_full_name }}{% endblock %}
 
@@ -42,7 +43,7 @@
                         <div class="col-md-4 text-center">
                             <div class="profile-picture-preview mb-3">
                                 {% if user.profile_picture %}
-                                    <img src="{{ user.profile_picture.url }}" 
+                                    <img src="{{ user.profile_picture.url|cache_bust }}" 
                                          alt="{{ user.get_full_name }}" 
                                          id="profile-preview"
                                          class="rounded-circle border border-3 border-white shadow-lg"

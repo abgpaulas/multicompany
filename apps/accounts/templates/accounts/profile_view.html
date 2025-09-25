@@ -1,4 +1,5 @@
 {% extends 'accounts/base.html' %}
+{% load media_utils %}
 
 {% block title %}{{ user.get_full_name }} - Profile{% endblock %}
 
@@ -12,7 +13,7 @@
                     <div class="col-md-3 text-center">
                         <div class="profile-picture-container position-relative d-inline-block">
                             {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" 
+                                <img src="{{ user.profile_picture.url|cache_bust }}" 
                                      alt="{{ user.get_full_name }}" 
                                      class="profile-picture rounded-circle border border-3 border-white shadow-lg"
                                      style="width: 150px; height: 150px; object-fit: cover;">

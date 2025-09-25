@@ -1,3 +1,4 @@
+{% load media_utils %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +68,7 @@
 <body>
     <div class="header">
         {% if company_logo_base64 %}
-        <img src="{{ company_logo_base64 }}" alt="Company Logo" class="company-logo">
+        <img src="{{ company_logo_base64|cache_bust }}" alt="Company Logo" class="company-logo">
         {% endif %}
         <h1>Manufacturing Job Orders Report</h1>
         {% if company_profile %}

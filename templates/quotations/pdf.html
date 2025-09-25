@@ -1,8 +1,9 @@
 {% extends 'base_print.html' %}
+{% load media_utils %}
 {% block content %}
 <div class="pdf-container">
     <div class="header" style="border-bottom: 4px solid {{ quotation.template.color_scheme|default:'#1976d2' }};">
-        <img src="{{ company.logo.url }}" alt="Logo" height="60" style="float:right;">
+        <img src="{{ company.logo.url|cache_bust }}" alt="Logo" height="60" style="float:right;">
         <h2 style="color: {{ quotation.template.color_scheme|default:'#1976d2' }};">{{ company.name }}</h2>
         <p>{{ company.address }}<br>{{ company.email }} | {{ company.phone }}</p>
     </div>

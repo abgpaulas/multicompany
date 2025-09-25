@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 {% load custom_filters %}
 
 {% block title %}Waybill {{ waybill.waybill_number }} - Multi-Purpose Business App{% endblock %}
@@ -239,7 +240,7 @@ body {
             {% if waybill.template.show_company_logo %}
             <div class="company-logo">
               {% if company_logo %}
-                <img src="{{ company_logo }}" alt="Company Logo">
+                <img src="{{ company_logo|cache_bust }}" alt="Company Logo">
               {% else %}
                 <img src="{% static 'img/logo-ct.png' %}" alt="Company Logo">
               {% endif %}
@@ -375,7 +376,7 @@ body {
           <!-- Signature Section -->
           {% if waybill.template.show_signature and company_signature %}
           <div class="signature-section">
-            <img src="{{ company_signature }}" alt="Signature">
+            <img src="{{ company_signature|cache_bust }}" alt="Signature">
             <p><strong>Authorized Signature</strong></p>
           </div>
           {% endif %}

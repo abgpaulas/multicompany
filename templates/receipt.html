@@ -1,3 +1,4 @@
+{% load media_utils %}
 <!DOCTYPE html>
 <html lang="en"> <!-- Declares the document type and specifies the language of the document as English -->
 <head>
@@ -370,7 +371,7 @@
             <div class="header"> <!-- Header section of the receipt -->
                 <div class="logo"> <!-- Container for the logo -->
                     {% if company_logo %}
-                        <img src="{{ company_logo }}" alt="Logo" id="logoDisplay">
+                        <img src="{{ company_logo|cache_bust }}" alt="Logo" id="logoDisplay">
                     {% else %}
                         <img src="{% static 'img/logo-ct.png' %}" alt="Logo" id="logoDisplay">
                     {% endif %}
@@ -439,7 +440,7 @@
             <div class="signature"> <!-- Section for displaying a signature -->
                 <div class="sign-box"> <!-- Container for the signature box -->
                     {% if company_signature %}
-                        <img src="{{ company_signature }}" alt="Signature" id="signatureDisplay">
+                        <img src="{{ company_signature|cache_bust }}" alt="Signature" id="signatureDisplay">
                     {% else %}
                         <div class="signature-placeholder">Authorized Signature</div>
                     {% endif %}

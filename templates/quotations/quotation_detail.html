@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 {% load currency_filters %}
 
 {% block title %}Quotation {{ quotation.quotation_number }} - Business App{% endblock %}
@@ -521,7 +522,7 @@
                 <h6><i class="fas fa-building me-2"></i>Company Information</h6>
                 {% if company_logo %}
                 <div class="text-center mb-3">
-                    <img src="{{ company_logo }}" alt="Company Logo" class="company-logo">
+                    <img src="{{ company_logo|cache_bust }}" alt="Company Logo" class="company-logo">
                 </div>
                 {% endif %}
                 <div class="info-row">

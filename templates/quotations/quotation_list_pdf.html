@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Quotations List</title>
     {% load humanize %}
+{% load media_utils %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -126,7 +127,7 @@
 <body>
     <div class="header">
         {% if company_logo_base64 %}
-        <img src="{{ company_logo_base64 }}" alt="Company Logo" class="company-logo">
+        <img src="{{ company_logo_base64|cache_bust }}" alt="Company Logo" class="company-logo">
         {% endif %}
         
         {% if company_profile %}

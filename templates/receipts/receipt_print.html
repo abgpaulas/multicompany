@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 {% load humanize %}
 {% load currency_filters %}
 {% block title %}Print Receipt {{ receipt.receipt_no }}{% endblock %}
@@ -16,7 +17,7 @@
                 <div class="card-body">
                     <div class="mb-4 text-center">
                         {% if company_logo %}
-                            <img src="{{ company_logo }}" alt="Company Logo" style="max-height: 80px; max-width: 200px;">
+                            <img src="{{ company_logo|cache_bust }}" alt="Company Logo" style="max-height: 80px; max-width: 200px;">
                         {% endif %}
                         <h3 class="mt-2 mb-0">{{ company_profile.company_name }}</h3>
                         <div class="text-muted small">
@@ -71,7 +72,7 @@
                     </div>
                     <div class="mb-2 text-center mt-4">
                         {% if company_signature %}
-                            <img src="{{ company_signature }}" alt="Signature" style="max-height: 80px; max-width: 200px;">
+                            <img src="{{ company_signature|cache_bust }}" alt="Signature" style="max-height: 80px; max-width: 200px;">
                             <div class="text-muted small">Authorized Signature</div>
                         {% endif %}
                     </div>

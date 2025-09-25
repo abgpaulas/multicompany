@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Quotation {{ quotation.quotation_number }}</title>
     {% load humanize %}
+{% load media_utils %}
     <style>
         @page {
             size: A4;
@@ -166,7 +167,7 @@
 
     <div class="header">
         {% if company_profile and company_profile.logo %}
-            <img src="{{ company_profile.logo.url }}" alt="Company Logo" class="company-logo">
+            <img src="{{ company_profile.logo.url|cache_bust }}" alt="Company Logo" class="company-logo">
         {% endif %}
         <div class="company-info">
             {% if company_profile %}
