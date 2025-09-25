@@ -9590,3 +9590,13 @@ INFO 2025-09-24 17:04:15,316 autoreload 3196 23464 C:\Users\CITY GRAPHIC\Desktop
 INFO 2025-09-24 17:04:15,582 autoreload 3256 13120 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\business_app\settings.py changed, reloading.
 INFO 2025-09-24 17:04:19,275 autoreload 7796 3492 Watching for file changes with StatReloader
 INFO 2025-09-24 17:04:19,279 autoreload 20904 17852 Watching for file changes with StatReloader
+INFO 2025-09-24 17:07:00,420 autoreload 20904 17852 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\business_app\settings.py changed, reloading.
+INFO 2025-09-24 17:07:00,755 autoreload 7796 3492 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\business_app\settings.py changed, reloading.
+INFO 2025-09-24 17:07:06,734 autoreload 20388 10948 Watching for file changes with StatReloader
+INFO 2025-09-24 17:07:07,037 autoreload 21960 12768 Watching for file changes with StatReloader
+INFO 2025-09-24 17:08:04,530 autoreload 20388 10948 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\business_app\settings.py changed, reloading.
+INFO 2025-09-24 17:08:04,946 autoreload 21960 12768 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\business_app\settings.py changed, reloading.
+INFO 2025-09-24 17:08:07,071 autoreload 16328 13140 Watching for file changes with StatReloader
+INFO 2025-09-24 17:08:07,170 autoreload 17824 4744 Watching for file changes with StatReloader
+INFO 2025-09-25 09:07:01,817 autoreload 21544 15736 Watching for file changes with StatReloader
+INFO 2025-09-25 09:07:36,865 autoreload 3744 19884 Watching for file changes with StatReloader

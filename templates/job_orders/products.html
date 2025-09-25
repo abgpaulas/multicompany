@@ -493,7 +493,7 @@ th:nth-child(22):after {
                         <td>{{ product.cycle_time }}</td>
                         <td>{{ product.submission_id }}</td>
                         <td id="approval-buttons-{{ product.id }}">
-                            {% if user.is_staff %}
+                            {% if user.has_perm:'job_orders.can_approve_jobs' or user.is_superuser %}
                                 <div class="approval-status-container">
                                     <div class="approval-header">
                                         <small class="text-muted d-block mb-1">
@@ -518,7 +518,7 @@ th:nth-child(22):after {
                                         </option>
                                     </select>
                                     <small class="text-info d-block mt-1">
-                                        <i class="fas fa-info-circle"></i> Staff only
+                                        <i class="fas fa-info-circle"></i> Authorized users only
                                     </small>
                                 </div>
                             {% else %}
@@ -535,7 +535,7 @@ th:nth-child(22):after {
                                         {% endif %}
                                     </span>
                                     <small class="text-muted d-block mt-1">
-                                        <i class="fas fa-lock"></i> Staff can change
+                                        <i class="fas fa-lock"></i> Authorized users can change
                                     </small>
                                 </div>
                             {% endif %}

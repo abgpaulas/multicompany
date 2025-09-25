@@ -154,6 +154,13 @@ def approve_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     action = request.POST.get('action')
     
+    # Check if user has permission to approve job orders
+    if not (request.user.is_superuser or request.user.has_perm('job_orders.can_approve_jobs')):
+        return JsonResponse({
+            'success': False,
+            'message': 'You do not have permission to approve job orders'
+        })
+    
     if action in ['approved', 'pending', 'rejected']:
         product.approval_status = action
         product.approved_by = request.user
