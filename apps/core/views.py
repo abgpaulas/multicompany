@@ -42,6 +42,43 @@ def dashboard(request):
 
 
 @login_required
+@require_http_methods(["POST"])
+@csrf_exempt
+def clear_company_image(request):
+    """AJAX endpoint to clear company logo or signature"""
+    try:
+        data = json.loads(request.body)
+        image_type = data.get('image_type')  # 'logo' or 'signature'
+        
+        if image_type not in ['logo', 'signature']:
+            return JsonResponse({'error': 'Invalid image type'}, status=400)
+        
+        try:
+            company_profile = request.user.company_profile
+        except CompanyProfile.DoesNotExist:
+            return JsonResponse({'error': 'Company profile not found'}, status=404)
+        
+        # Clear the specified image
+        if image_type == 'logo':
+            company_profile.logo = None
+        elif image_type == 'signature':
+            company_profile.signature = None
+        
+        company_profile.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Company {image_type} cleared successfully',
+            'image_type': image_type
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@login_required
 def company_profile_view(request):
     """Company profile view and edit"""
     try:

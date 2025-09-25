@@ -130,14 +130,26 @@
                                         Company Logo
                                     </label>
                                     {% if company_profile.logo %}
-                                        <div class="mb-2">
+                                        <div class="mb-2" id="logo-preview-container">
                                             <img src="{{ company_profile.logo.url|cache_bust }}" 
                                                  alt="Current Logo" 
                                                  class="img-thumbnail" 
+                                                 id="logo-preview"
                                                  style="max-width: 150px; max-height: 100px;"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;" id="logo-error">
                                                 <i class="fas fa-image"></i> Logo file not found. Please upload a new one.
+                                            </div>
+                                            <div class="mt-2">
+                                                <small class="text-muted">Currently: {{ company_profile.logo.name }}</small>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="clear-logo" name="clear_logo">
+                                                    <label class="form-check-label text-danger" for="clear-logo">
+                                                        Clear
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -158,14 +170,26 @@
                                         Company Signature
                                     </label>
                                     {% if company_profile.signature %}
-                                        <div class="mb-2">
+                                        <div class="mb-2" id="signature-preview-container">
                                             <img src="{{ company_profile.signature.url|cache_bust }}" 
                                                  alt="Current Signature" 
                                                  class="img-thumbnail" 
+                                                 id="signature-preview"
                                                  style="max-width: 150px; max-height: 100px;"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;">
+                                            <div style="display: none; color: #6c757d; font-size: 0.875rem;" id="signature-error">
                                                 <i class="fas fa-signature"></i> Signature file not found. Please upload a new one.
+                                            </div>
+                                            <div class="mt-2">
+                                                <small class="text-muted">Currently: {{ company_profile.signature.name }}</small>
+                                            </div>
+                                            <div class="mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="clear-signature" name="clear_signature">
+                                                    <label class="form-check-label text-danger" for="clear-signature">
+                                                        Clear
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -557,6 +581,104 @@ document.addEventListener('DOMContentLoaded', function() {
         signatureInput.addEventListener('change', function() {
             previewImage(this, 'signature-preview');
         });
+    }
+
+    // Clear image functionality
+    function clearImage(imageType) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (!csrfToken) {
+            console.error('CSRF token not found');
+            showNotification('Security token not found. Please refresh the page and try again.', 'error');
+            return;
+        }
+
+        fetch('/dashboard/clear-company-image/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken.value,
+            },
+            body: JSON.stringify({
+                image_type: imageType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Hide the image preview and show success message
+                const container = document.getElementById(`${imageType}-preview-container`);
+                if (container) {
+                    container.style.display = 'none';
+                }
+                
+                // Clear the file input
+                const fileInputId = imageType === 'logo' ? '{{ form.logo.id_for_label }}' : '{{ form.signature.id_for_label }}';
+                const fileInput = document.getElementById(fileInputId);
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+                
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.error || 'Failed to clear image', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error clearing image:', error);
+            showNotification('Failed to clear image. Please try again.', 'error');
+        });
+    }
+
+    // Add event listeners for clear checkboxes
+    const clearLogoCheckbox = document.getElementById('clear-logo');
+    const clearSignatureCheckbox = document.getElementById('clear-signature');
+    
+    if (clearLogoCheckbox) {
+        clearLogoCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                if (confirm('Are you sure you want to clear the company logo? This action cannot be undone.')) {
+                    clearImage('logo');
+                } else {
+                    this.checked = false;
+                }
+            }
+        });
+    }
+    
+    if (clearSignatureCheckbox) {
+        clearSignatureCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                if (confirm('Are you sure you want to clear the company signature? This action cannot be undone.')) {
+                    clearImage('signature');
+                } else {
+                    this.checked = false;
+                }
+            }
+        });
+    }
+
+    // Notification function
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} alert-dismissible fade show`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '9999';
+        notification.style.minWidth = '300px';
+        notification.innerHTML = `
+            <strong>${type === 'error' ? 'Error!' : type === 'success' ? 'Success!' : 'Info'}</strong><br>
+            ${message}
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        `;
+        document.body.appendChild(notification);
+        
+        // Auto-remove notification after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
     }
 
     // Validate JSON input for custom charges
