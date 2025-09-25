@@ -79,28 +79,38 @@ class CompanyProfileForm(forms.ModelForm):
     def clean_logo(self):
         logo = self.cleaned_data.get('logo')
         if logo:
-            # Validate file size (max 5MB)
-            if logo.size > 5 * 1024 * 1024:
-                raise ValidationError("Logo file size cannot exceed 5MB.")
-            
-            # Validate file type
-            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
-            if not any(logo.name.lower().endswith(ext) for ext in valid_extensions):
-                raise ValidationError("Logo must be a JPG, PNG, or GIF file.")
+            try:
+                # Validate file size (max 5MB) - only if file exists
+                if hasattr(logo, 'size') and logo.size > 5 * 1024 * 1024:
+                    raise ValidationError("Logo file size cannot exceed 5MB.")
+                
+                # Validate file type
+                valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+                if not any(logo.name.lower().endswith(ext) for ext in valid_extensions):
+                    raise ValidationError("Logo must be a JPG, PNG, or GIF file.")
+            except (FileNotFoundError, OSError, AttributeError):
+                # If file doesn't exist or can't be accessed, skip validation
+                # This happens when the file was deleted but the database still references it
+                pass
         
         return logo
 
     def clean_signature(self):
         signature = self.cleaned_data.get('signature')
         if signature:
-            # Validate file size (max 5MB)
-            if signature.size > 5 * 1024 * 1024:
-                raise ValidationError("Signature file size cannot exceed 5MB.")
-            
-            # Validate file type
-            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
-            if not any(signature.name.lower().endswith(ext) for ext in valid_extensions):
-                raise ValidationError("Signature must be a JPG, PNG, or GIF file.")
+            try:
+                # Validate file size (max 5MB) - only if file exists
+                if hasattr(signature, 'size') and signature.size > 5 * 1024 * 1024:
+                    raise ValidationError("Signature file size cannot exceed 5MB.")
+                
+                # Validate file type
+                valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+                if not any(signature.name.lower().endswith(ext) for ext in valid_extensions):
+                    raise ValidationError("Signature must be a JPG, PNG, or GIF file.")
+            except (FileNotFoundError, OSError, AttributeError):
+                # If file doesn't exist or can't be accessed, skip validation
+                # This happens when the file was deleted but the database still references it
+                pass
         
         return signature
 
