@@ -23,7 +23,7 @@ from django.utils import timezone
 
 def get_filtered_quotations(request):
     """Get filtered quotations based on search parameters"""
-    quotations = Quotation.objects.filter(user=request.user).select_related('client', 'template')
+    quotations = Quotation.objects.all().select_related('client', 'template')
     filter_form = QuotationFilterForm(request.GET)
     
     if filter_form.is_valid():
@@ -88,9 +88,9 @@ def quotation_list(request):
     )
     
     # Get current template
-    current_template = QuotationTemplate.objects.filter(user=request.user, is_default=True).first()
+    current_template = QuotationTemplate.objects.filter(is_default=True).first()
     if not current_template:
-        current_template = QuotationTemplate.objects.filter(user=request.user).first()
+        current_template = QuotationTemplate.objects.first()
         if not current_template:
             current_template = QuotationTemplate.objects.create(
                 user=request.user,
@@ -173,7 +173,7 @@ def get_quotation_context(quotation, user):
 @login_required
 def quotation_detail(request, pk):
     """Display detailed view of a quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     context = get_quotation_context(quotation, request.user)
     
     # Get company context for currency
@@ -225,7 +225,7 @@ def quotation_create(request):
 @login_required
 def quotation_edit(request, pk):
     """Edit an existing quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         form = QuotationForm(request.POST, instance=quotation, user=request.user)
@@ -259,7 +259,7 @@ def quotation_edit(request, pk):
 @login_required
 def quotation_delete(request, pk):
     """Delete a quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         quotation_number = quotation.quotation_number
@@ -276,7 +276,7 @@ def quotation_delete_ajax(request, pk):
     """Delete a quotation via AJAX"""
     if request.method == 'POST':
         try:
-            quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+            quotation = get_object_or_404(Quotation, pk=pk)
             quotation_number = quotation.quotation_number
             quotation.delete()
             return JsonResponse({
@@ -295,13 +295,13 @@ def quotation_delete_ajax(request, pk):
 @login_required
 def quotation_pdf(request, pk):
     """Generate PDF for a quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     context = get_quotation_context(quotation, request.user)
     
     # Get template
     template = quotation.template
     if not template:
-        template = QuotationTemplate.objects.filter(user=request.user, is_default=True).first()
+        template = QuotationTemplate.objects.filter(is_default=True).first()
         if not template:
             template = QuotationTemplate.objects.create(
                 user=request.user,
@@ -338,7 +338,7 @@ def quotation_pdf(request, pk):
 @login_required
 def quotation_print(request, pk):
     """Print-friendly view of a quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     context = get_quotation_context(quotation, request.user)
     
     # Get company context for currency
@@ -354,7 +354,7 @@ def quotation_print(request, pk):
 @login_required
 def template_list(request):
     """List all quotation templates"""
-    templates = QuotationTemplate.objects.filter(user=request.user).order_by('-is_default', 'name')
+    templates = QuotationTemplate.objects.all().order_by('-is_default', 'name')
     
     # Get company context for currency
     company_context = get_company_context(request.user)
@@ -397,7 +397,7 @@ def template_create(request):
 @login_required
 def template_edit(request, pk):
     """Edit a quotation template"""
-    template = get_object_or_404(QuotationTemplate, pk=pk, user=request.user)
+    template = get_object_or_404(QuotationTemplate, pk=pk)
     
     if request.method == 'POST':
         form = QuotationTemplateForm(request.POST, instance=template)
@@ -424,7 +424,7 @@ def template_edit(request, pk):
 @login_required
 def template_detail(request, pk):
     """View template details"""
-    template = get_object_or_404(QuotationTemplate, pk=pk, user=request.user)
+    template = get_object_or_404(QuotationTemplate, pk=pk)
     
     # Get company context for currency
     company_context = get_company_context(request.user)
@@ -441,7 +441,7 @@ def template_detail(request, pk):
 @login_required
 def template_delete(request, pk):
     """Delete a quotation template"""
-    template = get_object_or_404(QuotationTemplate, pk=pk, user=request.user)
+    template = get_object_or_404(QuotationTemplate, pk=pk)
     
     if request.method == 'POST':
         template_name = template.name
@@ -464,7 +464,7 @@ def template_delete(request, pk):
 @login_required
 def template_duplicate(request, pk):
     """Duplicate a quotation template"""
-    template = get_object_or_404(QuotationTemplate, pk=pk, user=request.user)
+    template = get_object_or_404(QuotationTemplate, pk=pk)
     
     if request.method == 'POST':
         new_template = QuotationTemplate.objects.create(
@@ -498,10 +498,10 @@ def template_duplicate(request, pk):
 @login_required
 def template_apply_to_all(request, pk):
     """Apply template to all quotations"""
-    template = get_object_or_404(QuotationTemplate, pk=pk, user=request.user)
+    template = get_object_or_404(QuotationTemplate, pk=pk)
     
     if request.method == 'POST':
-        updated_count = Quotation.objects.filter(user=request.user).update(template=template)
+        updated_count = Quotation.objects.all().update(template=template)
         messages.success(request, f'Template "{template.name}" applied to {updated_count} quotations!')
         return redirect('quotations:template_list')
     
@@ -520,14 +520,14 @@ def template_apply_to_all(request, pk):
 @login_required
 def api_templates(request):
     """API endpoint to get templates for AJAX requests"""
-    templates = QuotationTemplate.objects.filter(user=request.user).values('id', 'name', 'is_default')
+    templates = QuotationTemplate.objects.all().values('id', 'name', 'is_default')
     return JsonResponse({'templates': list(templates)})
 
 
 @login_required
 def quotation_update_status(request, pk):
     """Update quotation status"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         new_status = request.POST.get('status')
@@ -557,7 +557,7 @@ def quotation_update_status(request, pk):
 @login_required
 def convert_to_invoice(request, pk):
     """Convert quotation to invoice"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         try:
@@ -618,7 +618,7 @@ def convert_to_invoice(request, pk):
 def quotation_export_excel(request, pk=None):
     """Export quotations to Excel"""
     if pk:
-        quotations = Quotation.objects.filter(pk=pk, user=request.user)
+        quotations = Quotation.objects.filter(pk=pk)
     else:
         quotations = get_filtered_quotations(request)
     
@@ -659,7 +659,7 @@ def quotation_export_excel(request, pk=None):
 @login_required
 def quotation_stats(request):
     """Get quotation statistics for dashboard"""
-    quotations = Quotation.objects.filter(user=request.user)
+    quotations = Quotation.objects.all()
     
     stats = {
         'total_quotations': quotations.count(),
@@ -681,7 +681,7 @@ def quotation_stats(request):
 @login_required
 def quotation_duplicate(request, pk):
     """Duplicate a quotation"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         try:
@@ -741,7 +741,7 @@ def quotation_bulk_actions(request):
         if not quotation_ids:
             return JsonResponse({'success': False, 'message': 'No quotations selected'})
         
-        quotations = Quotation.objects.filter(pk__in=quotation_ids, user=request.user)
+        quotations = Quotation.objects.filter(pk__in=quotation_ids)
         
         if action == 'delete':
             count = quotations.count()
@@ -778,7 +778,7 @@ def quotation_bulk_actions(request):
 @login_required
 def quotation_preview(request, pk):
     """Preview quotation before sending"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     context = get_quotation_context(quotation, request.user)
     
     # Get company context for currency
@@ -794,7 +794,7 @@ def quotation_preview(request, pk):
 @login_required
 def quotation_send_email(request, pk):
     """Send quotation via email"""
-    quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+    quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
         # TODO: Implement email sending logic
@@ -978,7 +978,7 @@ def test_simple_quotation(request):
 def debug_quotation(request, pk):
     """Debug view for a specific quotation"""
     try:
-        quotation = get_object_or_404(Quotation, pk=pk, user=request.user)
+        quotation = get_object_or_404(Quotation, pk=pk)
         
         debug_info = {
             'quotation_id': quotation.pk,
