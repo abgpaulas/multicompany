@@ -65,15 +65,10 @@ def index(request):
     customer = User.objects.filter(is_active=True)
     customer_count = customer.count()
     
-    # Role-based statistics
-    if request.user.is_superuser or request.user.groups.filter(name='Leave Manager').exists():
-        pending_leaves = Leave.objects.filter(status='pending').order_by('-created_at')
-        pending_leaves_count = pending_leaves.count()
-        staff_count = Leave.objects.all().count()
-    else:
-        pending_leaves = Leave.objects.filter(employee=request.user, status='pending').order_by('-created_at')
-        pending_leaves_count = pending_leaves.count()
-        staff_count = Leave.objects.filter(employee=request.user).count()
+    # All users can see all leave requests
+    pending_leaves = Leave.objects.filter(status='pending').order_by('-created_at')
+    pending_leaves_count = pending_leaves.count()
+    staff_count = Leave.objects.all().count()
 
     context = {
         'product': product,
@@ -154,12 +149,7 @@ def approve_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     action = request.POST.get('action')
     
-    # Check if user has permission to approve job orders
-    if not (request.user.is_superuser or request.user.has_perm('job_orders.can_approve_jobs')):
-        return JsonResponse({
-            'success': False,
-            'message': 'You do not have permission to approve job orders'
-        })
+    # All authenticated users can approve job orders
     
     if action in ['approved', 'pending', 'rejected']:
         product.approval_status = action
@@ -430,12 +420,9 @@ def update_production_status(request):
 def delete_status_history(request, history_id):
     try:
         history = ProductStatusHistory.objects.get(id=history_id)
-        # Check if user is super admin or the one who created the status
-        if request.user.is_superuser or history.updated_by == request.user:
-            history.delete()
-            return JsonResponse({'success': True, 'message': 'Status update deleted successfully'})
-        else:
-            return JsonResponse({'success': False, 'message': 'You do not have permission to delete this status update'})
+        # All users can delete status updates
+        history.delete()
+        return JsonResponse({'success': True, 'message': 'Status update deleted successfully'})
     except ProductStatusHistory.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Status update not found'})
 
@@ -445,38 +432,35 @@ def edit_status_history(request, history_id):
     if request.method == 'POST':
         try:
             history = ProductStatusHistory.objects.get(id=history_id)
-            # Check if user is super admin or the one who created the status
-            if request.user.is_superuser or history.updated_by == request.user:
-                new_status = request.POST.get('new_status')
-                new_priority = request.POST.get('priority', history.priority)
-                
-                # Update the status history
-                history.status = new_status
-                history.priority = int(new_priority)
-                history.save()
-                
-                # If this is the most recent status update, also update the product's production_status
-                latest_history = ProductStatusHistory.objects.filter(
-                    product=history.product, 
-                    is_active=True
-                ).order_by('-created_at').first()
-                
-                if latest_history and latest_history.id == history.id:
-                    # This is the most recent status, update the product
-                    history.product.production_status = new_status
-                    history.product.production_status_date = history.created_at
-                    history.product.updated_by = request.user
-                    history.product.save()
-                
-                return JsonResponse({
-                    'success': True, 
-                    'message': 'Status update edited successfully',
-                    'new_status': new_status,
-                    'new_priority': int(new_priority),
-                    'new_priority_display': history.get_priority_display()
-                })
-            else:
-                return JsonResponse({'success': False, 'message': 'You do not have permission to edit this status update'})
+            # All users can edit status updates
+            new_status = request.POST.get('new_status')
+            new_priority = request.POST.get('priority', history.priority)
+            
+            # Update the status history
+            history.status = new_status
+            history.priority = int(new_priority)
+            history.save()
+            
+            # If this is the most recent status update, also update the product's production_status
+            latest_history = ProductStatusHistory.objects.filter(
+                product=history.product, 
+                is_active=True
+            ).order_by('-created_at').first()
+            
+            if latest_history and latest_history.id == history.id:
+                # This is the most recent status, update the product
+                history.product.production_status = new_status
+                history.product.production_status_date = history.created_at
+                history.product.updated_by = request.user
+                history.product.save()
+            
+            return JsonResponse({
+                'success': True, 
+                'message': 'Status update edited successfully',
+                'new_status': new_status,
+                'new_priority': int(new_priority),
+                'new_priority_display': history.get_priority_display()
+            })
         except ProductStatusHistory.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Status update not found'})
         except ValueError:
@@ -554,10 +538,8 @@ def order_create(request):
 # Leave views
 @login_required
 def leave_list(request):
-    if request.user.is_superuser:
-        leaves = Leave.objects.all().order_by('-created_at')
-    else:
-        leaves = Leave.objects.filter(employee=request.user).order_by('-created_at')
+    # All users can see all leave requests
+    leaves = Leave.objects.all().order_by('-created_at')
     
     context = {'leaves': leaves}
     return render(request, 'job_orders/leave_list.html', context)
@@ -600,7 +582,7 @@ def update_job_order_currency(request):
         company_profile.save()
         
         # Update all job order products to trigger recalculation
-        products = Product.objects.filter(created_by=request.user)
+        products = Product.objects.all()
         updated_products = 0
         
         for product in products:
@@ -609,7 +591,7 @@ def update_job_order_currency(request):
             updated_products += 1
         
         # Update all orders
-        orders = Order.objects.filter(customer=request.user)
+        orders = Order.objects.all()
         updated_orders = 0
         
         for order in orders:

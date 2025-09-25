@@ -9600,3 +9600,47 @@ INFO 2025-09-24 17:08:07,071 autoreload 16328 13140 Watching for file changes wi
 INFO 2025-09-24 17:08:07,170 autoreload 17824 4744 Watching for file changes with StatReloader
 INFO 2025-09-25 09:07:01,817 autoreload 21544 15736 Watching for file changes with StatReloader
 INFO 2025-09-25 09:07:36,865 autoreload 3744 19884 Watching for file changes with StatReloader
+INFO 2025-09-25 09:23:58,595 autoreload 3744 19884 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:23:58,623 autoreload 21544 15736 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:24:00,388 autoreload 10248 8264 Watching for file changes with StatReloader
+INFO 2025-09-25 09:24:00,422 autoreload 12584 17116 Watching for file changes with StatReloader
+INFO 2025-09-25 09:24:26,022 autoreload 10248 8264 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\forms.py changed, reloading.
+INFO 2025-09-25 09:24:26,090 autoreload 12584 17116 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\forms.py changed, reloading.
+INFO 2025-09-25 09:24:29,514 autoreload 10392 17252 Watching for file changes with StatReloader
+INFO 2025-09-25 09:24:29,540 autoreload 3984 12028 Watching for file changes with StatReloader
+INFO 2025-09-25 09:25:38,345 autoreload 10392 17252 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:25:38,379 autoreload 3984 12028 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:25:40,022 autoreload 22372 2964 Watching for file changes with StatReloader
+INFO 2025-09-25 09:25:40,048 autoreload 18424 15516 Watching for file changes with StatReloader
+INFO 2025-09-25 09:25:47,333 autoreload 22372 2964 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:25:47,387 autoreload 18424 15516 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:25:49,003 autoreload 2968 8268 Watching for file changes with StatReloader
+INFO 2025-09-25 09:25:49,042 autoreload 15040 19980 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:09,654 autoreload 15040 19980 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:26:09,667 autoreload 2968 8268 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:26:11,397 autoreload 13360 12020 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:11,409 autoreload 17684 6256 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:18,941 autoreload 13360 12020 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:26:19,006 autoreload 17684 6256 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:26:20,686 autoreload 20208 20332 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:20,748 autoreload 7676 4160 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:47,294 autoreload 20208 20332 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:26:47,330 autoreload 7676 4160 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:26:49,431 autoreload 19992 7312 Watching for file changes with StatReloader
+INFO 2025-09-25 09:26:49,474 autoreload 7652 15768 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:01,311 autoreload 19992 7312 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:01,435 autoreload 7652 15768 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:03,047 autoreload 13040 16352 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:03,164 autoreload 13576 11892 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:09,647 autoreload 13040 16352 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:09,913 autoreload 13576 11892 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:11,410 autoreload 22532 21800 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:11,695 autoreload 21920 9768 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:37,981 autoreload 22532 21800 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:27:38,177 autoreload 21920 9768 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\job_orders\views.py changed, reloading.
+INFO 2025-09-25 09:27:40,228 autoreload 21620 15448 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:40,234 autoreload 2616 13112 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:52,699 autoreload 21620 15448 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:52,783 autoreload 2616 13112 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\receipts\views.py changed, reloading.
+INFO 2025-09-25 09:27:54,613 autoreload 17260 18160 Watching for file changes with StatReloader
+INFO 2025-09-25 09:27:54,655 autoreload 23280 1892 Watching for file changes with StatReloader

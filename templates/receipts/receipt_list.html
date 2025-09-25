@@ -169,7 +169,7 @@
                     </td>
                     <td>
                         <a href="{% url 'receipts:detail' receipt.pk %}" class="btn btn-sm btn-info">View</a>
-                        {% if user.is_staff %}
+                        {% if user %}
                         <a href="{% url 'receipts:edit' receipt.pk %}" class="btn btn-sm btn-warning">Edit</a>
                         <a href="{% url 'receipts:delete' receipt.pk %}" class="btn btn-sm btn-danger">Delete</a>
                         {% endif %}

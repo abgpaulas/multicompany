@@ -139,27 +139,17 @@ class ProductForm(forms.ModelForm):
         self.fields['approved_by'].required = False
         self.fields['created_by'].required = False
         
-        if user and (user.is_superuser or user.has_perm('job_orders.can_approve_jobs')):
-            # Update approval status field for authorized users
+        if user:
+            # All authenticated users can edit approval status
             self.fields['approval_status'].choices = [('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')]
             self.fields['approval_status'].initial = self.instance.approval_status if self.instance else 'pending'
             
-            # Update approved_by field for authorized users
-            if user.is_superuser:
-                self.fields['approved_by'].queryset = User.objects.all()
-            else:
-                # For non-superusers, only show users with approval permissions
-                self.fields['approved_by'].queryset = User.objects.filter(
-                    Q(is_superuser=True) | Q(user_permissions__codename='can_approve_jobs') |
-                    Q(groups__permissions__codename='can_approve_jobs')
-                ).distinct()
+            # All users can see all other users for approved_by field
+            self.fields['approved_by'].queryset = User.objects.filter(is_active=True)
             self.fields['approved_by'].initial = self.instance.approved_by if self.instance else None
             
-            # Update created_by field for authorized users
-            if user.is_superuser:
-                self.fields['created_by'].queryset = User.objects.all()
-            else:
-                self.fields['created_by'].queryset = User.objects.filter(is_active=True)
+            # All users can see all other users for created_by field
+            self.fields['created_by'].queryset = User.objects.filter(is_active=True)
             self.fields['created_by'].initial = self.instance.created_by if self.instance else None
     
     def clean(self):

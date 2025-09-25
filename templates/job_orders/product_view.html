@@ -229,7 +229,7 @@
                                                             Status Update #{{ forloop.revcounter }}
                                                             <span class="badge ms-2 priority-badge priority-{{ status.priority }}" id="priority-badge-{{ status.id }}">Priority: {{ status.get_priority_display }}</span>
                                                         </h6>
-                                                        {% if user.is_superuser or status.updated_by == user %}
+                                                        {% if user %}
                                                         <div class="btn-group btn-group-sm">
                                                             <button class="btn btn-outline-primary btn-sm" onclick="editStatus({{ status.id }}, '{{ status.status|escapejs }}', {{ status.priority }})" title="Edit Status">
                                                                 <i class="fas fa-edit"></i>

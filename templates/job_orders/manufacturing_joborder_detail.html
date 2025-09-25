@@ -310,7 +310,7 @@
                                         </a>
                                         {% endif %}
                                         
-                                        {% if joborder.status == 'pending' and user.has_perm 'job_orders.can_approve_manufacturing_jobs' %}
+                                        {% if joborder.status == 'pending' %}
                                         <a href="{% url 'job_orders:manufacturing_joborder_approve' joborder.pk %}" class="btn btn-success">
                                             <i class="fas fa-check me-1"></i>Approve
                                         </a>

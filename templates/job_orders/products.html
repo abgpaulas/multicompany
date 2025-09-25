@@ -493,52 +493,33 @@ th:nth-child(22):after {
                         <td>{{ product.cycle_time }}</td>
                         <td>{{ product.submission_id }}</td>
                         <td id="approval-buttons-{{ product.id }}">
-                            {% if user.has_perm 'job_orders.can_approve_jobs' or user.is_superuser %}
-                                <div class="approval-status-container">
-                                    <div class="approval-header">
-                                        <small class="text-muted d-block mb-1">
-                                            <i class="fas fa-mouse-pointer"></i> Click to change
-                                        </small>
-                                    </div>
-                                    <select onchange="updateApprovalStatus({{ product.id }}, this.value)" 
-                                            class="form-control form-control-sm approval-select" 
-                                            data-product-id="{{ product.id }}"
-                                            title="Click to change approval status">
-                                        <option value="" {% if not product.approval_status %}selected{% endif %}>
-                                            <i class="fas fa-question-circle"></i> Select Status
-                                        </option>
-                                        <option value="approved" {% if product.approval_status == 'approved' %}selected{% endif %}>
-                                            <i class="fas fa-check-circle"></i> Approve
-                                        </option>
-                                        <option value="pending" {% if product.approval_status == 'pending' %}selected{% endif %}>
-                                            <i class="fas fa-clock"></i> Pending
-                                        </option>
-                                        <option value="rejected" {% if product.approval_status == 'rejected' %}selected{% endif %}>
-                                            <i class="fas fa-times-circle"></i> Reject
-                                        </option>
-                                    </select>
-                                    <small class="text-info d-block mt-1">
-                                        <i class="fas fa-info-circle"></i> Authorized users only
+                            <div class="approval-status-container">
+                                <div class="approval-header">
+                                    <small class="text-muted d-block mb-1">
+                                        <i class="fas fa-mouse-pointer"></i> Click to change
                                     </small>
                                 </div>
-                            {% else %}
-                                <div class="approval-status-display">
-                                    <span class="approval-badge approval-{{ product.approval_status|default:'none' }}">
-                                        {% if product.approval_status == 'approved' %}
-                                            <i class="fas fa-check-circle"></i> Approved
-                                        {% elif product.approval_status == 'pending' %}
-                                            <i class="fas fa-clock"></i> Pending
-                                        {% elif product.approval_status == 'rejected' %}
-                                            <i class="fas fa-times-circle"></i> Rejected
-                                        {% else %}
-                                            <i class="fas fa-question-circle"></i> Not Set
-                                        {% endif %}
-                                    </span>
-                                    <small class="text-muted d-block mt-1">
-                                        <i class="fas fa-lock"></i> Authorized users can change
-                                    </small>
-                                </div>
-                            {% endif %}
+                                <select onchange="updateApprovalStatus({{ product.id }}, this.value)" 
+                                        class="form-control form-control-sm approval-select" 
+                                        data-product-id="{{ product.id }}"
+                                        title="Click to change approval status">
+                                    <option value="" {% if not product.approval_status %}selected{% endif %}>
+                                        <i class="fas fa-question-circle"></i> Select Status
+                                    </option>
+                                    <option value="approved" {% if product.approval_status == 'approved' %}selected{% endif %}>
+                                        <i class="fas fa-check-circle"></i> Approve
+                                    </option>
+                                    <option value="pending" {% if product.approval_status == 'pending' %}selected{% endif %}>
+                                        <i class="fas fa-clock"></i> Pending
+                                    </option>
+                                    <option value="rejected" {% if product.approval_status == 'rejected' %}selected{% endif %}>
+                                        <i class="fas fa-times-circle"></i> Reject
+                                    </option>
+                                </select>
+                                <small class="text-info d-block mt-1">
+                                    <i class="fas fa-info-circle"></i> All users can change
+                                </small>
+                            </div>
                         </td>
                         <td>{{ product.created_by.email|default:"Unknown" }}</td>
                         <td>{{ product.approved_by.email|default:"Not yet approved" }}</td>

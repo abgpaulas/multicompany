@@ -24,8 +24,8 @@ def staff_required(view_func):
     return user_passes_test(lambda u: u.is_staff)(view_func)
 
 def get_filtered_receipts(request):
-    # Filter receipts by the current user who created them
-    receipts = Receipt.objects.filter(created_by=request.user).select_related('invoice')
+    # All users can see all receipts
+    receipts = Receipt.objects.all().select_related('invoice')
     search = request.GET.get('search', '')
     date_from = request.GET.get('date_from', '')
     date_to = request.GET.get('date_to', '')
@@ -85,7 +85,7 @@ def receipt_list_view(request):
     return render(request, 'receipts/receipt_list.html', context)
 
 @login_required
-@staff_required
+@login_required
 def receipt_create_view(request, invoice_id=None):
     """Create a new receipt, optionally linked to an invoice."""
     invoice = None
@@ -125,7 +125,7 @@ def receipt_create_view(request, invoice_id=None):
 @login_required
 def receipt_detail_view(request, receipt_id):
     """Show receipt details, print/export options, and audit log."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     
     # Get company context for currency from current user
     company_context = get_company_context(request.user)
@@ -144,10 +144,10 @@ def receipt_detail_view(request, receipt_id):
     return render(request, 'receipts/receipt_detail.html', context)
 
 @login_required
-@staff_required
+@login_required
 def receipt_edit_view(request, receipt_id):
     """Edit an existing receipt."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     if request.method == 'POST':
         form = ReceiptForm(request.POST, instance=receipt, user=request.user)
         if form.is_valid():
@@ -169,10 +169,10 @@ def receipt_edit_view(request, receipt_id):
     return render(request, 'receipts/receipt_form.html', context)
 
 @login_required
-@staff_required
+@login_required
 def receipt_delete_view(request, receipt_id):
     """Delete a receipt (staff only)."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     if request.method == 'POST':
         receipt.delete()
         messages.success(request, f'Receipt {receipt.receipt_no} deleted.')
@@ -183,7 +183,7 @@ def receipt_delete_view(request, receipt_id):
 @login_required
 def receipt_print_view(request, receipt_id):
     """Print-friendly view of the receipt."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     
     # Get company context for currency from current user
     company_context = get_company_context(request.user)
@@ -204,7 +204,7 @@ def receipt_print_view(request, receipt_id):
 @login_required
 def receipt_pdf_view(request, receipt_id):
     """Export receipt as PDF with status display."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     
     # Get company context for currency from current user
     company_context = get_company_context(request.user)
@@ -240,7 +240,7 @@ def receipt_pdf_view(request, receipt_id):
 @login_required
 def receipt_email_view(request, receipt_id):
     """Send receipt to client via email (stub)."""
-    receipt = get_object_or_404(Receipt, pk=receipt_id, created_by=request.user)
+    receipt = get_object_or_404(Receipt, pk=receipt_id)
     # TODO: Implement email sending
     messages.info(request, 'Email feature not implemented yet.')
     return redirect('receipts:detail', receipt_id=receipt.pk)
@@ -254,7 +254,7 @@ def export_excel(request):
     ws.append(headers)
     
     # Filter receipts by the user who created them
-    receipts = Receipt.objects.filter(created_by=request.user).select_related('invoice')
+    receipts = Receipt.objects.all().select_related('invoice')
     
     for receipt in receipts:
         ws.append([

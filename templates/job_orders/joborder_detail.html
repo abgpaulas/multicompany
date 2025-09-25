@@ -47,7 +47,7 @@
       {% if joborder.status == 'draft' and joborder.is_editable %}
         <a href="{% url 'job_orders:joborder_submit' joborder.pk %}" class="btn btn-primary btn-sm">Submit</a>
       {% endif %}
-      {% if joborder.status == 'pending' and perms.job_orders.can_approve_joborder %}
+      {% if joborder.status == 'pending' %}
         <a href="{% url 'job_orders:joborder_approve' joborder.pk %}" class="btn btn-success btn-sm">Approve</a>
         <a href="{% url 'job_orders:joborder_reject' joborder.pk %}" class="btn btn-outline-danger btn-sm">Reject</a>
       {% endif %}
