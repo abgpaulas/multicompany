@@ -27,6 +27,7 @@ class GitHubStorage(Storage):
                 print(f"GitHub storage initialized successfully for {self.repo_name}")
             except Exception as e:
                 print(f"GitHub storage initialization failed: {e}")
+                print("Falling back to GitHub URLs without upload capability")
                 self.github = None
                 self.repo = None
         else:
