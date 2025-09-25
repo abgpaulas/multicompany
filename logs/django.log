@@ -9744,3 +9744,4 @@ INFO 2025-09-25 10:32:17,762 autoreload 10076 11308 C:\Users\CITY GRAPHIC\Deskto
 INFO 2025-09-25 10:32:17,982 autoreload 14536 16644 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
 INFO 2025-09-25 10:32:19,725 autoreload 6056 23344 Watching for file changes with StatReloader
 INFO 2025-09-25 10:32:19,959 autoreload 20396 972 Watching for file changes with StatReloader
+INFO 2025-09-25 10:46:34,725 autoreload 10664 22288 Watching for file changes with StatReloader
