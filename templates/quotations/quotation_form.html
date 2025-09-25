@@ -35,6 +35,7 @@
         padding: 1.5rem;
         margin-bottom: 1rem;
         position: relative;
+        padding-top: 2.5rem; /* Add extra top padding for delete checkbox */
     }
     
     .line-item:last-child {
@@ -65,11 +66,12 @@
         border-radius: 20px;
         font-size: 0.875rem;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
     }
     
     .remove-item-btn:hover {
         transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         color: white;
     }
     
@@ -157,25 +159,52 @@
     
     .delete-checkbox-container {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(220, 53, 69, 0.1);
-        padding: 5px 10px;
-        border-radius: 15px;
-        border: 1px solid #dc3545;
+        top: 15px;
+        right: 15px;
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+    
+    .delete-checkbox-container:hover {
+        border-color: #dc3545;
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+        transform: translateY(-1px);
     }
     
     .delete-checkbox-container label {
-        color: #dc3545;
-        font-size: 0.875rem;
-        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.8rem;
+        font-weight: 500;
         margin: 0;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.3s ease;
+    }
+    
+    .delete-checkbox-container label i {
+        font-size: 0.75rem;
+        transition: color 0.3s ease;
+    }
+    
+    .delete-checkbox-container:hover label {
+        color: #dc3545;
     }
     
     .delete-checkbox-container input[type="checkbox"] {
-        margin-right: 5px;
-        transform: scale(1.2);
+        margin: 0;
+        transform: scale(1.1);
+        accent-color: #dc3545;
+    }
+    
+    .delete-checkbox-container input[type="checkbox"]:checked {
+        accent-color: #dc3545;
     }
     
     .line-item {
@@ -257,7 +286,11 @@
                             </div>
                             {{ form.id }}
                             <div class="delete-checkbox-container">
-                                {{ form.DELETE|as_crispy_field }}
+                                <label for="{{ form.DELETE.id_for_label }}">
+                                    <input type="checkbox" name="{{ form.DELETE.html_name }}" id="{{ form.DELETE.id_for_label }}" {% if form.DELETE.value %}checked{% endif %}>
+                                    <i class="fas fa-trash-alt"></i>
+                                    Delete
+                                </label>
                             </div>
                         </div>
                         {% endfor %}
@@ -446,6 +479,18 @@ function addLineItem() {
     const deleteCheckbox = newForm.querySelector('input[name$="-DELETE"]');
     if (deleteCheckbox) {
         deleteCheckbox.checked = false;
+    }
+    
+    // Update delete checkbox structure for new items
+    const deleteContainer = newForm.querySelector('.delete-checkbox-container');
+    if (deleteContainer) {
+        deleteContainer.innerHTML = `
+            <label for="${deleteCheckbox.id}">
+                <input type="checkbox" name="${deleteCheckbox.name}" id="${deleteCheckbox.id}">
+                <i class="fas fa-trash-alt"></i>
+                Delete
+            </label>
+        `;
     }
     
     container.appendChild(newForm);

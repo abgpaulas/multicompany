@@ -9745,3 +9745,5 @@ INFO 2025-09-25 10:32:17,982 autoreload 14536 16644 C:\Users\CITY GRAPHIC\Deskto
 INFO 2025-09-25 10:32:19,725 autoreload 6056 23344 Watching for file changes with StatReloader
 INFO 2025-09-25 10:32:19,959 autoreload 20396 972 Watching for file changes with StatReloader
 INFO 2025-09-25 10:46:34,725 autoreload 10664 22288 Watching for file changes with StatReloader
+INFO 2025-09-25 10:47:02,844 basehttp 6056 12692 "GET /quotations/create/ HTTP/1.1" 302 0
+INFO 2025-09-25 10:47:03,224 basehttp 6056 12692 "GET /auth/login/?next=/quotations/create/ HTTP/1.1" 200 42550
