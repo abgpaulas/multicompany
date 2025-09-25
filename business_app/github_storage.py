@@ -101,14 +101,16 @@ class GitHubStorage(Storage):
     
     def _save_locally(self, name, content):
         """Fallback to local storage"""
-        local_path = os.path.join(settings.MEDIA_ROOT, name)
+        # Use get_valid_name to handle absolute paths
+        valid_name = self.get_valid_name(name)
+        local_path = os.path.join(settings.MEDIA_ROOT, valid_name)
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
         
         with open(local_path, 'wb') as f:
             for chunk in content.chunks():
                 f.write(chunk)
         
-        return name
+        return valid_name
     
     def delete(self, name):
         """Delete file from GitHub repository"""
@@ -139,7 +141,9 @@ class GitHubStorage(Storage):
     
     def _delete_locally(self, name):
         """Fallback to local deletion"""
-        local_path = os.path.join(settings.MEDIA_ROOT, name)
+        # Use get_valid_name to handle absolute paths
+        valid_name = self.get_valid_name(name)
+        local_path = os.path.join(settings.MEDIA_ROOT, valid_name)
         if os.path.exists(local_path):
             os.remove(local_path)
     
@@ -147,7 +151,9 @@ class GitHubStorage(Storage):
         """Check if file exists"""
         if name.startswith('https://raw.githubusercontent.com/'):
             return True  # Assume GitHub URLs exist
-        return os.path.exists(os.path.join(settings.MEDIA_ROOT, name))
+        # Use get_valid_name to handle absolute paths
+        valid_name = self.get_valid_name(name)
+        return os.path.exists(os.path.join(settings.MEDIA_ROOT, valid_name))
     
     def url(self, name):
         """Return file URL"""
@@ -168,7 +174,9 @@ class GitHubStorage(Storage):
         if name.startswith('https://raw.githubusercontent.com/'):
             # For GitHub URLs, we can't easily get size without API call
             return 0
-        local_path = os.path.join(settings.MEDIA_ROOT, name)
+        # Use get_valid_name to handle absolute paths
+        valid_name = self.get_valid_name(name)
+        local_path = os.path.join(settings.MEDIA_ROOT, valid_name)
         if os.path.exists(local_path):
             return os.path.getsize(local_path)
         return 0
@@ -181,5 +189,7 @@ class GitHubStorage(Storage):
             response = requests.get(name)
             return ContentFile(response.content)
         
-        local_path = os.path.join(settings.MEDIA_ROOT, name)
+        # Use get_valid_name to handle absolute paths
+        valid_name = self.get_valid_name(name)
+        local_path = os.path.join(settings.MEDIA_ROOT, valid_name)
         return open(local_path, mode)
