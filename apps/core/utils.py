@@ -242,8 +242,8 @@ def get_company_context(user):
         company_profile = user.company_profile
         return {
             'company_profile': company_profile,
-            'company_logo': get_safe_media_url(company_profile.logo),
-            'company_signature': get_safe_media_url(company_profile.signature),
+            'company_logo': get_media_url_with_cache_bust(company_profile.logo),
+            'company_signature': get_media_url_with_cache_bust(company_profile.signature),
             'currency_symbol': company_profile.currency_symbol,
             'currency_code': company_profile.currency_code,
         }
@@ -262,13 +262,37 @@ def get_safe_media_url(media_field):
         return None
     
     try:
-        # Check if the file actually exists
-        if hasattr(media_field, 'path') and os.path.exists(media_field.path):
+        # For GitHub storage, we don't need to check local file existence
+        # The URL will be a GitHub raw URL if using GitHub storage
+        if hasattr(media_field, 'name') and media_field.name:
+            # Always return the URL if the field has a name
+            # This works for both local and GitHub storage
             return media_field.url
-        elif hasattr(media_field, 'name') and media_field.name:
-            # For production environments, we can't always check file existence
-            # Return the URL if the field has a name, but this might still 404
-            return media_field.url
+        else:
+            return None
+    except Exception:
+        return None
+
+
+def get_media_url_with_cache_bust(media_field):
+    """Get media URL with cache-busting parameter to ensure updates are visible"""
+    if not media_field:
+        return None
+    
+    try:
+        if hasattr(media_field, 'name') and media_field.name:
+            base_url = media_field.url
+            # Add cache-busting parameter using file modification time or current timestamp
+            if hasattr(media_field, 'modified_time'):
+                cache_bust = int(media_field.modified_time.timestamp())
+            else:
+                # Use current timestamp as fallback
+                import time
+                cache_bust = int(time.time())
+            
+            # Add cache-busting parameter
+            separator = '&' if '?' in base_url else '?'
+            return f"{base_url}{separator}v={cache_bust}"
         else:
             return None
     except Exception:

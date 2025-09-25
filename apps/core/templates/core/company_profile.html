@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 
 {% block title %}Company Profile{% endblock %}
 
@@ -130,7 +131,7 @@
                                     </label>
                                     {% if company_profile.logo %}
                                         <div class="mb-2">
-                                            <img src="{{ company_profile.logo.url }}" 
+                                            <img src="{{ company_profile.logo.url|cache_bust }}" 
                                                  alt="Current Logo" 
                                                  class="img-thumbnail" 
                                                  style="max-width: 150px; max-height: 100px;"

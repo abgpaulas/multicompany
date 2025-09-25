@@ -1,44 +1,63 @@
 from django import template
-from django.conf import settings
-import os
+from django.utils.safestring import mark_safe
+import time
 
 register = template.Library()
 
+
 @register.filter
-def safe_media_url(media_field):
+def cache_bust(url):
     """
-    Safely get media URL, return None if file doesn't exist
+    Add cache-busting parameter to any URL
+    Usage: {{ image_url|cache_bust }}
+    """
+    if not url:
+        return url
+    
+    try:
+        # Add cache-busting parameter using current timestamp
+        cache_bust = int(time.time())
+        separator = '&' if '?' in url else '?'
+        return f"{url}{separator}v={cache_bust}"
+    except Exception:
+        return url
+
+
+@register.filter
+def media_url_with_bust(media_field):
+    """
+    Get media URL with cache-busting parameter
+    Usage: {{ company.logo|media_url_with_bust }}
     """
     if not media_field:
         return None
     
     try:
-        # Check if file exists
-        if hasattr(media_field, 'path') and os.path.exists(media_field.path):
-            return media_field.url
-        elif hasattr(media_field, 'name') and media_field.name:
-            # For production, we can't check file existence easily
-            # Just return the URL if the field has a name
-            return media_field.url
+        if hasattr(media_field, 'name') and media_field.name:
+            base_url = media_field.url
+            # Add cache-busting parameter using current timestamp
+            cache_bust = int(time.time())
+            separator = '&' if '?' in base_url else '?'
+            return f"{base_url}{separator}v={cache_bust}"
         else:
             return None
     except Exception:
         return None
 
+
 @register.filter
-def has_media_file(media_field):
+def safe_media_url(media_field):
     """
-    Check if media field has a valid file
+    Safely get media URL, return None if file doesn't exist
+    Usage: {{ company.logo|safe_media_url }}
     """
     if not media_field:
-        return False
+        return None
     
     try:
-        if hasattr(media_field, 'path') and os.path.exists(media_field.path):
-            return True
-        elif hasattr(media_field, 'name') and media_field.name:
-            return True
+        if hasattr(media_field, 'name') and media_field.name:
+            return media_field.url
         else:
-            return False
+            return None
     except Exception:
-        return False
+        return None

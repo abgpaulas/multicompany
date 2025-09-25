@@ -9812,3 +9812,19 @@ INFO 2025-09-25 11:44:46,589 autoreload 11308 536 Watching for file changes with
 INFO 2025-09-25 11:45:05,364 autoreload 19044 10528 Watching for file changes with StatReloader
 INFO 2025-09-25 11:45:08,964 basehttp 1868 17080 "GET /dashboard/company-profile/ HTTP/1.1" 302 0
 INFO 2025-09-25 11:45:09,176 basehttp 1868 17080 "GET /auth/login/?next=/dashboard/company-profile/ HTTP/1.1" 200 42550
+INFO 2025-09-25 12:07:29,616 autoreload 1868 8444 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:29,701 autoreload 19044 10528 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:29,703 autoreload 23212 12840 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:30,599 autoreload 11308 536 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:33,304 autoreload 21244 22748 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:33,304 autoreload 16916 6828 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:33,543 autoreload 13196 9176 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:33,944 autoreload 6236 20084 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:47,516 autoreload 16916 6828 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:47,539 autoreload 21244 22748 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:47,718 autoreload 13196 9176 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:48,506 autoreload 6236 20084 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\utils.py changed, reloading.
+INFO 2025-09-25 12:07:50,670 autoreload 15404 15464 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:50,753 autoreload 4012 20552 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:51,209 autoreload 16740 6392 Watching for file changes with StatReloader
+INFO 2025-09-25 12:07:51,990 autoreload 22056 3824 Watching for file changes with StatReloader
