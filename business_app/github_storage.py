@@ -20,18 +20,35 @@ class GitHubStorage(Storage):
         self.branch = os.getenv('GITHUB_BRANCH', 'master')
         
         if self.github_token:
-            self.github = Github(self.github_token)
-            self.repo = self.github.get_repo(self.repo_name)
+            try:
+                self.github = Github(self.github_token)
+                self.repo = self.github.get_repo(self.repo_name)
+                print(f"GitHub storage initialized successfully for {self.repo_name}")
+            except Exception as e:
+                print(f"GitHub storage initialization failed: {e}")
+                self.github = None
+                self.repo = None
         else:
+            print("GitHub token not found, GitHub storage disabled")
             self.github = None
             self.repo = None
     
-    def _get_file_path(self, name):
-        """Generate a unique file path in the repository"""
-        # Keep the original structure but ensure it's organized
+    def get_valid_name(self, name):
+        """Get a valid name for the file"""
+        # Handle absolute paths by converting them to relative paths
+        if name.startswith('/'):
+            # Remove leading slash and any absolute path components
+            name = name.lstrip('/')
+        
+        # Ensure it starts with media/ for organization
         if not name.startswith('media/'):
             name = f"media/{name}"
+        
         return name
+    
+    def _get_file_path(self, name):
+        """Generate a unique file path in the repository"""
+        return self.get_valid_name(name)
     
     def _save(self, name, content):
         """Save file to GitHub repository"""
