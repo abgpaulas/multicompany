@@ -47,7 +47,7 @@ def client_list(request):
     
     # Get total quotations for this company
     from apps.quotations.models import Quotation
-    total_quotations = Quotation.objects.filter(user=request.user).count()
+    total_quotations = Quotation.objects.all().count()
     
     return render(request, 'clients/client_list.html', {
         'clients': clients,

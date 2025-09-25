@@ -54,49 +54,57 @@ def company_profile_view(request):
     if request.method == 'POST':
         form = CompanyProfileForm(request.POST, request.FILES, instance=company_profile)
         if form.is_valid():
-            # Delete old files if new ones are uploaded
-            if company_profile and 'logo' in request.FILES:
-                company_profile.delete_old_logo()
-            if company_profile and 'signature' in request.FILES:
-                company_profile.delete_old_signature()
-            
-            company_profile = form.save(commit=False)
-            company_profile.user = request.user
-            company_profile.save()
-            
-            # Auto-assign company_admin role when company profile is created
-            if created:
-                try:
-                    from apps.rbac.models import Role, UserRole
-                    from apps.rbac.managers import RoleManager
-                    
-                    # Create default roles if they don't exist
-                    RoleManager.create_default_roles()
-                    
-                    # Get or create company_admin role
-                    company_admin_role = Role.objects.get(role_type='company_admin')
-                    
-                    # Assign role to user if not already assigned
-                    if not UserRole.objects.filter(user=request.user, company=company_profile, role=company_admin_role).exists():
-                        UserRole.objects.create(
-                            user=request.user,
-                            company=company_profile,
-                            role=company_admin_role,
-                            assigned_by=request.user,
-                            is_active=True
-                        )
-                        messages.success(request, 'Company profile created successfully! You have been assigned Company Admin role.')
-                    else:
-                        messages.success(request, 'Company profile created successfully!')
+            try:
+                # Delete old files if new ones are uploaded
+                if company_profile and 'logo' in request.FILES:
+                    company_profile.delete_old_logo()
+                if company_profile and 'signature' in request.FILES:
+                    company_profile.delete_old_signature()
+                
+                company_profile = form.save(commit=False)
+                company_profile.user = request.user
+                company_profile.save()
+                
+                # Auto-assign company_admin role when company profile is created
+                if created:
+                    try:
+                        from apps.rbac.models import Role, UserRole
+                        from apps.rbac.managers import RoleManager
                         
-                except Exception as e:
-                    # If role assignment fails, still show success for profile creation
-                    messages.success(request, 'Company profile created successfully!')
-                    messages.warning(request, 'Note: Please contact administrator to assign proper roles for full access.')
-            else:
-                messages.success(request, 'Company profile updated successfully!')
-            
-            return redirect('core:dashboard')
+                        # Create default roles if they don't exist
+                        RoleManager.create_default_roles()
+                        
+                        # Get or create company_admin role
+                        company_admin_role = Role.objects.get(role_type='company_admin')
+                        
+                        # Assign role to user if not already assigned
+                        if not UserRole.objects.filter(user=request.user, company=company_profile, role=company_admin_role).exists():
+                            UserRole.objects.create(
+                                user=request.user,
+                                company=company_profile,
+                                role=company_admin_role,
+                                assigned_by=request.user,
+                                is_active=True
+                            )
+                            messages.success(request, 'Company profile created successfully! You have been assigned Company Admin role.')
+                        else:
+                            messages.success(request, 'Company profile created successfully!')
+                            
+                    except Exception as e:
+                        # If role assignment fails, still show success for profile creation
+                        messages.success(request, 'Company profile created successfully!')
+                        messages.warning(request, 'Note: Please contact administrator to assign proper roles for full access.')
+                else:
+                    messages.success(request, 'Company profile updated successfully!')
+                
+                return redirect('core:dashboard')
+                
+            except Exception as e:
+                messages.error(request, f'Error saving company profile: {str(e)}')
+                # Log the error for debugging
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Error saving company profile: {str(e)}')
         else:
             # Add form errors to messages for debugging
             for field, errors in form.errors.items():
@@ -105,10 +113,16 @@ def company_profile_view(request):
     else:
         form = CompanyProfileForm(instance=company_profile)
     
+    # Get currency symbol for template
+    currency_symbol = '$'  # Default
+    if company_profile and company_profile.currency_symbol:
+        currency_symbol = company_profile.currency_symbol
+    
     context = {
         'form': form,
         'company_profile': company_profile,
         'created': created,
+        'currency_symbol': currency_symbol,
     }
     
     return render(request, 'core/company_profile.html', context)
