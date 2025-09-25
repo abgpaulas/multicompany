@@ -137,8 +137,11 @@ class GitHubStorage(Storage):
         """Return file URL"""
         if name.startswith('https://raw.githubusercontent.com/'):
             return name  # Already a full URL
-        elif name.startswith('media/'):
+        elif name.startswith('media/') or '/' in name:
             # This is a GitHub path, construct the full URL
+            # Add 'media/' prefix if not present
+            if not name.startswith('media/'):
+                name = f"media/{name}"
             return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{name}"
         else:
             # Local file

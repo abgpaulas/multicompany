@@ -187,7 +187,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Cloud Storage Configuration
 USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 USE_CLOUDINARY = os.getenv('USE_CLOUDINARY', 'False').lower() == 'true'
-USE_GITHUB = os.getenv('USE_GITHUB', 'False').lower() == 'true'
+USE_GITHUB = os.getenv('USE_GITHUB', 'True').lower() == 'true'
+GITHUB_REPO_NAME = os.getenv('GITHUB_REPO_NAME', 'abgpaulas/multicompany')
+GITHUB_BRANCH = os.getenv('GITHUB_BRANCH', 'master')
 
 # Cloudinary Configuration
 if USE_CLOUDINARY:
