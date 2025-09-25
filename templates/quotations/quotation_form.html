@@ -223,7 +223,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="form-container">
-                <form method="post" id="quotationForm">
+                <form method="post" id="quotationForm" onsubmit="return validateForm()">
                     {% csrf_token %}
                     
                     <!-- Basic Information -->
@@ -433,6 +433,9 @@ function setupEventListeners() {
             e.target.name.includes('shipping_fee') || e.target.name.includes('other_charges')) {
             updateTotals();
         }
+        if (e.target.name.includes('product_service') || e.target.name.includes('description')) {
+            updatePreview();
+        }
     });
     
     // Listen for delete checkbox changes
@@ -441,6 +444,17 @@ function setupEventListeners() {
             if (e.target.checked) {
                 removeLineItemImmediately(e.target);
             }
+        }
+    });
+    
+    // Listen for form changes to update preview in real-time
+    document.addEventListener('input', function(e) {
+        if (e.target.name.includes('form-') && 
+            (e.target.name.includes('product_service') || 
+             e.target.name.includes('description') || 
+             e.target.name.includes('quantity') || 
+             e.target.name.includes('unit_price'))) {
+            updatePreview();
         }
     });
 }
@@ -498,6 +512,9 @@ function addLineItem() {
     // Update form count
     formIndex++;
     totalForms.value = formIndex;
+    
+    // Update preview after adding new item
+    updatePreview();
 }
 
 function removeLineItem(button) {
@@ -646,30 +663,73 @@ function updatePreview() {
     const preview = document.getElementById('quotationPreview');
     const lineItems = document.querySelectorAll('.line-item');
     let previewHtml = '';
+    let hasItems = false;
     
     lineItems.forEach((item, index) => {
         if (item.style.display !== 'none') {
-            const product = item.querySelector('input[name$="-product_service"]').value;
-            const quantity = item.querySelector('input[name$="-quantity"]').value;
-            const unitPrice = item.querySelector('input[name$="-unit_price"]').value;
+            const product = item.querySelector('input[name$="-product_service"]')?.value || '';
+            const description = item.querySelector('input[name$="-description"]')?.value || '';
+            const quantity = item.querySelector('input[name$="-quantity"]')?.value || '0';
+            const unitPrice = item.querySelector('input[name$="-unit_price"]')?.value || '0';
             
-            if (product && quantity && unitPrice) {
+            if (product || description) {
+                hasItems = true;
                 const total = (parseFloat(quantity) || 0) * (parseFloat(unitPrice) || 0);
+                const displayName = product || description || `Item ${index + 1}`;
+                
                 previewHtml += `
-                    <div class="d-flex justify-content-between mb-1">
-                        <span>${product}</span>
-                        <span>${currencySymbol}${total.toFixed(2)}</span>
+                    <div class="border-bottom pb-2 mb-2">
+                        <div class="fw-bold text-primary">${displayName}</div>
+                        ${description && product ? `<small class="text-muted">${description}</small>` : ''}
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">Qty: ${quantity} × ${currencySymbol}${parseFloat(unitPrice || 0).toFixed(2)}</small>
+                            <span class="fw-bold">${currencySymbol}${total.toFixed(2)}</span>
+                        </div>
                     </div>
                 `;
             }
         }
     });
     
-    if (previewHtml) {
+    if (hasItems) {
         preview.innerHTML = previewHtml;
     } else {
-        preview.innerHTML = '<p class="text-muted mb-2">Add line items to see preview</p>';
+        preview.innerHTML = '<p class="text-muted mb-2"><i class="fas fa-info-circle me-1"></i>Add line items to see preview</p>';
     }
+}
+
+function validateForm() {
+    const clientField = document.getElementById('id_client');
+    const lineItems = document.querySelectorAll('.line-item');
+    let hasValidItems = false;
+    
+    // Check if client is selected
+    if (!clientField.value) {
+        alert('Please select a client before creating the quotation.');
+        clientField.focus();
+        return false;
+    }
+    
+    // Check if there are valid line items
+    lineItems.forEach((item) => {
+        if (item.style.display !== 'none') {
+            const product = item.querySelector('input[name$="-product_service"]')?.value || '';
+            const description = item.querySelector('input[name$="-description"]')?.value || '';
+            const quantity = item.querySelector('input[name$="-quantity"]')?.value || '0';
+            const unitPrice = item.querySelector('input[name$="-unit_price"]')?.value || '0';
+            
+            if ((product || description) && parseFloat(quantity) > 0 && parseFloat(unitPrice) > 0) {
+                hasValidItems = true;
+            }
+        }
+    });
+    
+    if (!hasValidItems) {
+        alert('Please add at least one line item with product/service name, quantity, and unit price.');
+        return false;
+    }
+    
+    return true;
 }
 </script>
 {% endblock %} 

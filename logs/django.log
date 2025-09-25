@@ -9747,3 +9747,17 @@ INFO 2025-09-25 10:32:19,959 autoreload 20396 972 Watching for file changes with
 INFO 2025-09-25 10:46:34,725 autoreload 10664 22288 Watching for file changes with StatReloader
 INFO 2025-09-25 10:47:02,844 basehttp 6056 12692 "GET /quotations/create/ HTTP/1.1" 302 0
 INFO 2025-09-25 10:47:03,224 basehttp 6056 12692 "GET /auth/login/?next=/quotations/create/ HTTP/1.1" 200 42550
+INFO 2025-09-25 10:57:05,596 basehttp 6056 4224 "GET /quotations/create/ HTTP/1.1" 302 0
+INFO 2025-09-25 10:57:05,615 basehttp 6056 4224 "GET /auth/login/?next=/quotations/create/ HTTP/1.1" 200 42550
+INFO 2025-09-25 11:02:48,682 autoreload 20396 972 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:02:48,948 autoreload 10664 22288 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:02:48,962 autoreload 6056 23344 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:02:52,308 autoreload 7320 7144 Watching for file changes with StatReloader
+INFO 2025-09-25 11:02:52,309 autoreload 8420 19836 Watching for file changes with StatReloader
+INFO 2025-09-25 11:02:52,451 autoreload 6524 7792 Watching for file changes with StatReloader
+INFO 2025-09-25 11:04:33,957 autoreload 6524 7792 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:04:34,034 autoreload 7320 7144 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:04:34,745 autoreload 8420 19836 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
+INFO 2025-09-25 11:04:37,153 autoreload 6680 21588 Watching for file changes with StatReloader
+INFO 2025-09-25 11:04:37,230 autoreload 1936 11484 Watching for file changes with StatReloader
+INFO 2025-09-25 11:04:37,328 autoreload 18080 6008 Watching for file changes with StatReloader

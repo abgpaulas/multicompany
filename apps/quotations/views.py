@@ -193,14 +193,34 @@ def quotation_create(request):
         formset = QuotationItemFormSet(request.POST, instance=Quotation())
         
         if form.is_valid() and formset.is_valid():
-            quotation = form.save()
-            
-            formset.instance = quotation
-            formset.save()
-            
-            quotation.calculate_totals()
-            messages.success(request, f'Quotation {quotation.quotation_number} created successfully!')
-            return redirect('quotations:quotation_detail', pk=quotation.pk)
+            try:
+                quotation = form.save(commit=False)
+                quotation.user = request.user
+                quotation.save()
+                
+                formset.instance = quotation
+                formset.save()
+                
+                quotation.calculate_totals()
+                messages.success(request, f'Quotation {quotation.quotation_number} created successfully!')
+                return redirect('quotations:quotation_detail', pk=quotation.pk)
+            except Exception as e:
+                messages.error(request, f'Error creating quotation: {str(e)}')
+                # Log the error for debugging
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f'Error creating quotation: {str(e)}')
+        else:
+            # Add form errors to messages
+            if not form.is_valid():
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{field}: {error}')
+            if not formset.is_valid():
+                for form_errors in formset.errors:
+                    for field, errors in form_errors.items():
+                        for error in errors:
+                            messages.error(request, f'Line item {field}: {error}')
     else:
         form = QuotationForm()
         formset = QuotationItemFormSet(instance=Quotation())
