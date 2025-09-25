@@ -41,6 +41,11 @@ class GitHubStorage(Storage):
             # Remove leading slash and any absolute path components
             name = name.lstrip('/')
         
+        # Handle Windows-style absolute paths
+        if ':' in name and name[1:3] == ':\\':
+            # Extract just the filename from Windows absolute path
+            name = os.path.basename(name)
+        
         # Ensure it starts with media/ for organization
         if not name.startswith('media/'):
             name = f"media/{name}"
@@ -62,7 +67,7 @@ class GitHubStorage(Storage):
             # Read file content
             file_content = content.read()
             
-            # Generate unique path
+            # Generate unique path - handle absolute paths properly
             file_path = self._get_file_path(name)
             
             # Encode file content to base64

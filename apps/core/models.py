@@ -72,13 +72,21 @@ class CompanyProfile(models.Model):
 
     def delete_old_logo(self):
         """Delete old logo file when uploading new one"""
-        if self.logo and os.path.isfile(self.logo.path):
-            os.remove(self.logo.path)
+        try:
+            if self.logo and hasattr(self.logo, 'path') and self.logo.path and os.path.isfile(self.logo.path):
+                os.remove(self.logo.path)
+        except Exception:
+            # Skip deletion for cloud storage backends
+            pass
 
     def delete_old_signature(self):
         """Delete old signature file when uploading new one"""
-        if self.signature and os.path.isfile(self.signature.path):
-            os.remove(self.signature.path)
+        try:
+            if self.signature and hasattr(self.signature, 'path') and self.signature.path and os.path.isfile(self.signature.path):
+                os.remove(self.signature.path)
+        except Exception:
+            # Skip deletion for cloud storage backends
+            pass
 
     def save(self, *args, **kwargs):
         # Track if a new logo is being uploaded
@@ -90,28 +98,35 @@ class CompanyProfile(models.Model):
         elif self.logo:
             new_logo = True
         super().save(*args, **kwargs)
-        # Auto-convert logo to PNG if needed
+        # Auto-convert logo to PNG if needed (only for local storage)
         if self.logo and new_logo:
-            logo_path = self.logo.path
-            ext = os.path.splitext(logo_path)[1].lower()
-            if ext != '.png':
-                try:
-                    img = Image.open(logo_path)
-                    if img.mode in ("RGBA", "P"):  # Convert to RGB if needed
-                        img = img.convert("RGBA")
-                    else:
-                        img = img.convert("RGB")
-                    png_io = BytesIO()
-                    img.save(png_io, format='PNG')
-                    png_name = os.path.splitext(self.logo.name)[0] + '.png'
-                    self.logo.save(png_name, ContentFile(png_io.getvalue()), save=False)
-                    super().save(update_fields=['logo'])
-                    # Remove the old file if it exists and is not PNG
-                    if ext != '.png' and os.path.exists(logo_path):
-                        os.remove(logo_path)
-                except Exception as e:
-                    # Optionally log the error
-                    pass
+            try:
+                # Check if we're using local storage (has .path attribute)
+                if hasattr(self.logo, 'path') and self.logo.path:
+                    logo_path = self.logo.path
+                    ext = os.path.splitext(logo_path)[1].lower()
+                    if ext != '.png':
+                        try:
+                            img = Image.open(logo_path)
+                            if img.mode in ("RGBA", "P"):  # Convert to RGB if needed
+                                img = img.convert("RGBA")
+                            else:
+                                img = img.convert("RGB")
+                            png_io = BytesIO()
+                            img.save(png_io, format='PNG')
+                            png_name = os.path.splitext(self.logo.name)[0] + '.png'
+                            self.logo.save(png_name, ContentFile(png_io.getvalue()), save=False)
+                            super().save(update_fields=['logo'])
+                            # Remove the old file if it exists and is not PNG
+                            if ext != '.png' and os.path.exists(logo_path):
+                                os.remove(logo_path)
+                        except Exception as e:
+                            # Optionally log the error
+                            pass
+                # For GitHub storage, we skip the PNG conversion as it's handled by the storage backend
+            except Exception as e:
+                # Skip PNG conversion for cloud storage backends
+                pass
 
 
 def format_currency(value, currency_symbol=None):
