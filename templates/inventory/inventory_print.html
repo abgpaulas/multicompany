@@ -1,6 +1,7 @@
 {% extends 'base_print.html' %}
 {% load static %}
 {% load inventory_extras %}
+{% load media_utils %}
 
 {% block title %}{{ item.product_name }} - Print View{% endblock %}
 
@@ -252,7 +253,7 @@
     <!-- Print Header -->
     <div class="print-header">
         {% if layout.company_logo %}
-            <img src="{{ layout.company_logo.url }}" alt="Company Logo" class="company-logo">
+            <img src="{{ layout.company_logo.url|cache_bust }}" alt="Company Logo" class="company-logo">
         {% endif %}
         
         <h1>{{ layout.company_name|default:"Inventory Management" }}</h1>

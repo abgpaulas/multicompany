@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 
 {% block title %}Manufacturing Job Order - {{ joborder.job_order }}{% endblock %}
 
@@ -288,7 +289,7 @@
                                     <h6 class="mb-0"><i class="fas fa-image me-2"></i>Job Order Image</h6>
                                 </div>
                                 <div class="card-body text-center">
-                                    <img src="{{ joborder.image.url }}" alt="Job Order Image" class="img-fluid" style="max-height: 300px;">
+                                    <img src="{{ joborder.image.url|cache_bust }}" alt="Job Order Image" class="img-fluid" style="max-height: 300px;">
                                 </div>
                             </div>
                         </div>

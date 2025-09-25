@@ -1,3 +1,4 @@
+{% load media_utils %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -295,7 +296,7 @@
     {% if product.image %}
     <div class="image-section">
         <h3>Product Image</h3>
-        <img src="{{ product.image.url }}" alt="Product Image" class="product-image">
+        <img src="{{ product.image.url|cache_bust }}" alt="Product Image" class="product-image">
     </div>
     {% endif %}
 

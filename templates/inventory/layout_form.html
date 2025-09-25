@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 
 {% block title %}{{ title|default:"Layout Form" }} - Inventory Layout{% endblock %}
 
@@ -398,7 +399,7 @@
                     <div class="branding-preview" id="brandingPreview">
                         <div id="previewLogo">
                             {% if form.instance.company_logo %}
-                                <img src="{{ form.instance.company_logo.url }}" alt="Company Logo">
+                                <img src="{{ form.instance.company_logo.url|cache_bust }}" alt="Company Logo">
                             {% else %}
                                 <i class="fas fa-building fa-3x text-muted"></i>
                             {% endif %}

@@ -9828,3 +9828,10 @@ INFO 2025-09-25 12:07:50,670 autoreload 15404 15464 Watching for file changes wi
 INFO 2025-09-25 12:07:50,753 autoreload 4012 20552 Watching for file changes with StatReloader
 INFO 2025-09-25 12:07:51,209 autoreload 16740 6392 Watching for file changes with StatReloader
 INFO 2025-09-25 12:07:51,990 autoreload 22056 3824 Watching for file changes with StatReloader
+INFO 2025-09-25 12:13:20,794 autoreload 12068 19048 Watching for file changes with StatReloader
+INFO 2025-09-25 12:17:59,779 basehttp 15404 22640 "GET / HTTP/1.1" 302 0
+INFO 2025-09-25 12:17:59,849 basehttp 15404 22640 "GET /dashboard/landing/ HTTP/1.1" 200 7488
+INFO 2025-09-25 12:18:13,317 basehttp 15404 22640 "GET /dashboard/company-profile/ HTTP/1.1" 302 0
+INFO 2025-09-25 12:18:13,407 basehttp 15404 22640 "GET /auth/login/?next=/dashboard/company-profile/ HTTP/1.1" 200 42550
+INFO 2025-09-25 12:18:36,798 basehttp 15404 22640 "GET /dashboard/ HTTP/1.1" 302 0
+INFO 2025-09-25 12:18:36,801 basehttp 15404 22640 "GET /auth/login/?next=/dashboard/ HTTP/1.1" 200 42550

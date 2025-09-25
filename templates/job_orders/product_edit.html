@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Edit Product{% endblock %}
 {% load crispy_forms_tags %}
+{% load media_utils %}
 
 {% block content %}
 {% include 'partials/topside.html' %}
@@ -206,7 +207,7 @@
                             {% if product.image %}
                                 <div class="mt-2">
                                     <small class="text-muted">Current image:</small><br>
-                                    <img src="{{ product.image.url }}" alt="Current product image" class="img-thumbnail" style="max-width: 200px;">
+                                    <img src="{{ product.image.url|cache_bust }}" alt="Current product image" class="img-thumbnail" style="max-width: 200px;">
                                 </div>
                             {% endif %}
                         </div>

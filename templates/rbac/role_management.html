@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media_utils %}
 
 {% block title %}Role Management{% endblock %}
 
@@ -126,7 +127,7 @@
                                         <div class="d-flex px-2 py-1">
                                             <div>
                                                 {% if user_role.user.profile_picture %}
-                                                <img src="{{ user_role.user.profile_picture.url }}" class="user-avatar me-3" alt="user avatar">
+                                                <img src="{{ user_role.user.profile_picture.url|cache_bust }}" class="user-avatar me-3" alt="user avatar">
                                                 {% else %}
                                                 <div class="user-avatar me-3 bg-gradient-primary d-flex align-items-center justify-content-center text-white">
                                                     {{ user_role.user.first_name|first }}{{ user_role.user.last_name|first }}

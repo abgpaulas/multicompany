@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load media_utils %}
 {% block title %}Product View - {{ product.job_order }}{% endblock %}
 
 {% block content %}
@@ -284,7 +285,7 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <h6 class="text-primary">Product Image</h6>
-                    <img src="{{ product.image.url }}" alt="Product Image" class="img-fluid" style="max-width: 400px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="{{ product.image.url|cache_bust }}" alt="Product Image" class="img-fluid" style="max-width: 400px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div style="display: none; color: #6c757d; font-size: 0.875rem;">
                         <i class="fas fa-image"></i> Product image not found. Please upload a new image.
                     </div>
