@@ -20,7 +20,12 @@ class GitHubStorage(Storage):
         self.repo_name = config('GITHUB_REPO_NAME', default='abgpaulas/multicompany')
         self.branch = config('GITHUB_BRANCH', default='master')
         
-        if self.github_token:
+        # Always initialize without GitHub connection to prevent memory issues
+        self.github = None
+        self.repo = None
+        
+        # Only try to connect if token is available and we're not on Render
+        if self.github_token and not os.getenv('RENDER'):
             try:
                 self.github = Github(self.github_token)
                 self.repo = self.github.get_repo(self.repo_name)
@@ -31,9 +36,10 @@ class GitHubStorage(Storage):
                 self.github = None
                 self.repo = None
         else:
-            print("GitHub token not found, using GitHub URLs without upload capability")
-            self.github = None
-            self.repo = None
+            if os.getenv('RENDER'):
+                print("Running on Render - using GitHub URLs without API connection")
+            else:
+                print("GitHub token not found, using GitHub URLs without upload capability")
     
     def get_valid_name(self, name):
         """Get a valid name for the file"""
@@ -63,9 +69,10 @@ class GitHubStorage(Storage):
     
     def _save(self, name, content):
         """Save file to GitHub repository"""
-        if not self.repo:
-            # Even without GitHub repo, still use GitHub URLs for consistency
-            print("GitHub not configured, using local storage but GitHub URLs")
+        # Always use local storage on Render to prevent memory issues
+        if not self.repo or os.getenv('RENDER'):
+            # Use local storage but return GitHub URL format for consistency
+            print("Using local storage with GitHub URL format")
             local_name = self._save_locally(name, content)
             # Return the GitHub URL path format for consistency
             return self.get_valid_name(local_name)
@@ -206,9 +213,19 @@ class GitHubStorage(Storage):
         """Open file for reading"""
         if name.startswith('https://raw.githubusercontent.com/'):
             # For GitHub URLs, we need to download the file
-            import requests
-            response = requests.get(name)
-            return ContentFile(response.content)
+            try:
+                import requests
+                response = requests.get(name, timeout=10)
+                response.raise_for_status()
+                return ContentFile(response.content)
+            except Exception as e:
+                print(f"Error downloading file from GitHub: {e}")
+                # Fallback to local file if it exists
+                valid_name = self.get_valid_name(name)
+                local_path = os.path.join(settings.MEDIA_ROOT, valid_name)
+                if os.path.exists(local_path):
+                    return open(local_path, mode)
+                raise
         
         # Use get_valid_name to handle absolute paths
         valid_name = self.get_valid_name(name)
