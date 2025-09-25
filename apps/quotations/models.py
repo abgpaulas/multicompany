@@ -11,7 +11,7 @@ User = get_user_model()
 
 class QuotationTemplate(models.Model):
     """User-defined quotation templates with custom styling and colors"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quotation_templates')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quotation_templates', null=True, blank=True)
     name = models.CharField(max_length=200, default='Default Quotation', help_text="Template name (e.g., 'Professional Quotation', 'Service Quote')")
     description = models.TextField(blank=True, help_text="Description of this template")
     
@@ -66,7 +66,7 @@ class Quotation(models.Model):
     quotation_number = models.CharField(max_length=50, editable=False)
     quotation_date = models.DateField(auto_now_add=True)
     valid_until = models.DateField(null=True, blank=True, help_text="Quotation validity period")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quotations')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quotations', null=True, blank=True)
     template = models.ForeignKey(QuotationTemplate, on_delete=models.SET_NULL, null=True, blank=True, related_name='quotations')
     
     # Client Information

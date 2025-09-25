@@ -8,23 +8,20 @@ def fix_quotation_template_user_id(apps, schema_editor):
     Fix the user_id column conflict in quotations_quotationtemplate table
     """
     with connection.cursor() as cursor:
-        # Check if the column exists and handle the conflict
-        cursor.execute("""
-            SELECT column_name 
-            FROM information_schema.columns 
-            WHERE table_name='quotations_quotationtemplate' 
-            AND column_name='user_id'
-        """)
-        
-        if cursor.fetchone():
-            # Column exists, no need to add it
+        # For SQLite, we'll use PRAGMA to check table info
+        try:
+            cursor.execute("PRAGMA table_info(quotations_quotationtemplate)")
+            columns = [row[1] for row in cursor.fetchall()]
+            
+            if 'user_id' not in columns:
+                # Column doesn't exist, add it
+                cursor.execute("""
+                    ALTER TABLE quotations_quotationtemplate 
+                    ADD COLUMN user_id INTEGER REFERENCES accounts_user(id) ON DELETE CASCADE
+                """)
+        except Exception:
+            # If table doesn't exist, skip
             pass
-        else:
-            # Column doesn't exist, add it
-            cursor.execute("""
-                ALTER TABLE quotations_quotationtemplate 
-                ADD COLUMN user_id INTEGER REFERENCES accounts_user(id) ON DELETE CASCADE
-            """)
 
 
 def reverse_fix_quotation_template_user_id(apps, schema_editor):
@@ -32,18 +29,18 @@ def reverse_fix_quotation_template_user_id(apps, schema_editor):
     Reverse migration - remove user_id column if it exists
     """
     with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT column_name 
-            FROM information_schema.columns 
-            WHERE table_name='quotations_quotationtemplate' 
-            AND column_name='user_id'
-        """)
-        
-        if cursor.fetchone():
-            cursor.execute("""
-                ALTER TABLE quotations_quotationtemplate 
-                DROP COLUMN user_id
-            """)
+        try:
+            cursor.execute("PRAGMA table_info(quotations_quotationtemplate)")
+            columns = [row[1] for row in cursor.fetchall()]
+            
+            if 'user_id' in columns:
+                cursor.execute("""
+                    ALTER TABLE quotations_quotationtemplate 
+                    DROP COLUMN user_id
+                """)
+        except Exception:
+            # If table doesn't exist, skip
+            pass
 
 
 class Migration(migrations.Migration):
