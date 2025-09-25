@@ -30,7 +30,7 @@ class GitHubStorage(Storage):
                 self.github = None
                 self.repo = None
         else:
-            print("GitHub token not found, GitHub storage disabled")
+            print("GitHub token not found, using GitHub URLs without upload capability")
             self.github = None
             self.repo = None
     
@@ -178,8 +178,11 @@ class GitHubStorage(Storage):
                 name = f"media/{name}"
             return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{name}"
         else:
-            # Local file
-            return f"{settings.MEDIA_URL}{name}"
+            # For any other file, assume it should be in GitHub
+            # This ensures all images use GitHub URLs even without token
+            if not name.startswith('media/'):
+                name = f"media/{name}"
+            return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{name}"
     
     def size(self, name):
         """Get file size"""
