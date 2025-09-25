@@ -93,7 +93,6 @@ def quotation_list(request):
         current_template = QuotationTemplate.objects.first()
         if not current_template:
             current_template = QuotationTemplate.objects.create(
-                user=request.user,
                 name="Default Quotation Template",
                 description="Automatically created default template",
                 is_default=True,
@@ -190,13 +189,11 @@ def quotation_detail(request, pk):
 def quotation_create(request):
     """Create a new quotation"""
     if request.method == 'POST':
-        form = QuotationForm(request.POST, user=request.user)
-        formset = QuotationItemFormSet(request.POST, instance=Quotation(user=request.user))
+        form = QuotationForm(request.POST)
+        formset = QuotationItemFormSet(request.POST, instance=Quotation())
         
         if form.is_valid() and formset.is_valid():
-            quotation = form.save(commit=False)
-            quotation.user = request.user
-            quotation.save()
+            quotation = form.save()
             
             formset.instance = quotation
             formset.save()
@@ -205,8 +202,8 @@ def quotation_create(request):
             messages.success(request, f'Quotation {quotation.quotation_number} created successfully!')
             return redirect('quotations:quotation_detail', pk=quotation.pk)
     else:
-        form = QuotationForm(user=request.user)
-        formset = QuotationItemFormSet(instance=Quotation(user=request.user))
+        form = QuotationForm()
+        formset = QuotationItemFormSet(instance=Quotation())
     
     # Get company context for currency
     company_context = get_company_context(request.user)
@@ -228,7 +225,7 @@ def quotation_edit(request, pk):
     quotation = get_object_or_404(Quotation, pk=pk)
     
     if request.method == 'POST':
-        form = QuotationForm(request.POST, instance=quotation, user=request.user)
+        form = QuotationForm(request.POST, instance=quotation)
         formset = QuotationItemFormSet(request.POST, instance=quotation)
         
         if form.is_valid() and formset.is_valid():
@@ -238,7 +235,7 @@ def quotation_edit(request, pk):
             messages.success(request, f'Quotation {quotation.quotation_number} updated successfully!')
             return redirect('quotations:quotation_detail', pk=quotation.pk)
     else:
-        form = QuotationForm(instance=quotation, user=request.user)
+        form = QuotationForm(instance=quotation)
         formset = QuotationItemFormSet(instance=quotation)
     
     # Get company context for currency
@@ -304,7 +301,6 @@ def quotation_pdf(request, pk):
         template = QuotationTemplate.objects.filter(is_default=True).first()
         if not template:
             template = QuotationTemplate.objects.create(
-                user=request.user,
                 name="Default Template",
                 is_default=True,
                 primary_color="#1976d2",
@@ -565,7 +561,6 @@ def convert_to_invoice(request, pk):
             
             # Create invoice
             invoice = Invoice.objects.create(
-                user=request.user,
                 client=quotation.client,
                 invoice_date=timezone.now().date(),
                 due_date=timezone.now().date() + timezone.timedelta(days=30),
@@ -687,7 +682,6 @@ def quotation_duplicate(request, pk):
         try:
             # Create new quotation
             new_quotation = Quotation.objects.create(
-                user=request.user,
                 template=quotation.template,
                 valid_until=quotation.valid_until,
                 client=quotation.client,
@@ -871,7 +865,6 @@ def quotation_debug(request):
         try:
             # Create a test quotation
             quotation = Quotation.objects.create(
-                user=request.user,
                 quotation_number="TEST-001",
                 client=None,
                 subtotal=Decimal('1000.00'),
@@ -910,7 +903,6 @@ def test_quotation_creation(request):
             
             # Create quotation
             quotation = Quotation.objects.create(
-                user=request.user,
                 client=client,
                 subtotal=Decimal('500.00'),
                 grand_total=Decimal('500.00'),
