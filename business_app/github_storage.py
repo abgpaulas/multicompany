@@ -46,6 +46,10 @@ class GitHubStorage(Storage):
             # Extract just the filename from Windows absolute path
             name = os.path.basename(name)
         
+        # Remove any existing media/ prefix to avoid duplication
+        if name.startswith('media/'):
+            name = name[6:]  # Remove 'media/' prefix
+        
         # Ensure it starts with media/ for organization
         if not name.startswith('media/'):
             name = f"media/{name}"
@@ -167,8 +171,10 @@ class GitHubStorage(Storage):
             return name  # Already a full URL
         elif name.startswith('media/') or '/' in name:
             # This is a GitHub path, construct the full URL
-            # Add 'media/' prefix if not present
-            if not name.startswith('media/'):
+            # Remove any duplicate media/ prefix
+            if name.startswith('media/media/'):
+                name = name[6:]  # Remove the first 'media/'
+            elif not name.startswith('media/'):
                 name = f"media/{name}"
             return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{name}"
         else:
