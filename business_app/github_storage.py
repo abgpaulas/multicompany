@@ -64,9 +64,11 @@ class GitHubStorage(Storage):
     def _save(self, name, content):
         """Save file to GitHub repository"""
         if not self.repo:
-            # Fallback to local storage if GitHub is not configured
-            print("GitHub not configured, using local storage")
-            return self._save_locally(name, content)
+            # Even without GitHub repo, still use GitHub URLs for consistency
+            print("GitHub not configured, using local storage but GitHub URLs")
+            local_name = self._save_locally(name, content)
+            # Return the GitHub URL path format for consistency
+            return self.get_valid_name(local_name)
         
         try:
             # Read file content
@@ -162,6 +164,9 @@ class GitHubStorage(Storage):
         """Check if file exists"""
         if name.startswith('https://raw.githubusercontent.com/'):
             return True  # Assume GitHub URLs exist
+        # For any media file, assume it exists in GitHub
+        if name.startswith('media/') or '/' in name:
+            return True
         # Use get_valid_name to handle absolute paths
         valid_name = self.get_valid_name(name)
         return os.path.exists(os.path.join(settings.MEDIA_ROOT, valid_name))
