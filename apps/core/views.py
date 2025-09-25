@@ -55,19 +55,20 @@ def company_profile_view(request):
         form = CompanyProfileForm(request.POST, request.FILES, instance=company_profile)
         if form.is_valid():
             try:
-                # Delete old files if new ones are uploaded
-                if company_profile and 'logo' in request.FILES:
-                    try:
-                        company_profile.delete_old_logo()
-                    except (FileNotFoundError, OSError):
-                        # Old logo file doesn't exist, continue without error
-                        pass
-                if company_profile and 'signature' in request.FILES:
-                    try:
-                        company_profile.delete_old_signature()
-                    except (FileNotFoundError, OSError):
-                        # Old signature file doesn't exist, continue without error
-                        pass
+                # Delete old files if new ones are uploaded or if clear checkbox is checked
+                if company_profile:
+                    if 'logo' in request.FILES or form.cleaned_data.get('logo') is False:
+                        try:
+                            company_profile.delete_old_logo()
+                        except (FileNotFoundError, OSError):
+                            # Old logo file doesn't exist, continue without error
+                            pass
+                    if 'signature' in request.FILES or form.cleaned_data.get('signature') is False:
+                        try:
+                            company_profile.delete_old_signature()
+                        except (FileNotFoundError, OSError):
+                            # Old signature file doesn't exist, continue without error
+                            pass
                 
                 company_profile = form.save(commit=False)
                 company_profile.user = request.user

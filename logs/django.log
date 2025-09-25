@@ -9835,3 +9835,23 @@ INFO 2025-09-25 12:18:13,317 basehttp 15404 22640 "GET /dashboard/company-profil
 INFO 2025-09-25 12:18:13,407 basehttp 15404 22640 "GET /auth/login/?next=/dashboard/company-profile/ HTTP/1.1" 200 42550
 INFO 2025-09-25 12:18:36,798 basehttp 15404 22640 "GET /dashboard/ HTTP/1.1" 302 0
 INFO 2025-09-25 12:18:36,801 basehttp 15404 22640 "GET /auth/login/?next=/dashboard/ HTTP/1.1" 200 42550
+INFO 2025-09-25 12:39:37,488 autoreload 12068 19048 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\templatetags\media_utils.py changed, reloading.
+INFO 2025-09-25 12:39:37,628 autoreload 4012 20552 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\templatetags\media_utils.py changed, reloading.
+INFO 2025-09-25 12:39:37,762 autoreload 22056 3824 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\templatetags\media_utils.py changed, reloading.
+INFO 2025-09-25 12:39:37,799 autoreload 15404 15464 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\templatetags\media_utils.py changed, reloading.
+INFO 2025-09-25 12:39:37,811 autoreload 16740 6392 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\templatetags\media_utils.py changed, reloading.
+INFO 2025-09-25 12:39:41,392 autoreload 21920 12112 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:41,467 autoreload 12912 22788 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:41,523 autoreload 11448 17944 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:41,525 autoreload 9752 2892 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:41,735 autoreload 22972 18260 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:55,150 autoreload 12912 22788 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\views.py changed, reloading.
+INFO 2025-09-25 12:39:55,189 autoreload 9752 2892 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\views.py changed, reloading.
+INFO 2025-09-25 12:39:55,318 autoreload 11448 17944 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\views.py changed, reloading.
+INFO 2025-09-25 12:39:55,368 autoreload 21920 12112 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\views.py changed, reloading.
+INFO 2025-09-25 12:39:55,619 autoreload 22972 18260 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\core\views.py changed, reloading.
+INFO 2025-09-25 12:39:59,555 autoreload 8268 13996 Watching for file changes with StatReloader
+INFO 2025-09-25 12:39:59,886 autoreload 16148 15348 Watching for file changes with StatReloader
+INFO 2025-09-25 12:40:00,087 autoreload 12500 3820 Watching for file changes with StatReloader
+INFO 2025-09-25 12:40:00,118 autoreload 9004 2040 Watching for file changes with StatReloader
+INFO 2025-09-25 12:40:00,317 autoreload 11304 13728 Watching for file changes with StatReloader

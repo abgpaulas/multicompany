@@ -15,7 +15,15 @@ def cache_bust(url):
         return url
     
     try:
-        # Add cache-busting parameter using current timestamp
+        # Check if URL already has cache-busting parameter
+        if '?v=' in url or '&v=' in url:
+            # Remove existing cache-busting parameter
+            if '?v=' in url:
+                url = url.split('?v=')[0]
+            elif '&v=' in url:
+                url = url.split('&v=')[0]
+        
+        # Add new cache-busting parameter using current timestamp
         cache_bust = int(time.time())
         separator = '&' if '?' in url else '?'
         return f"{url}{separator}v={cache_bust}"
