@@ -28,10 +28,10 @@ class GitHubStorage(Storage):
     
     def _get_file_path(self, name):
         """Generate a unique file path in the repository"""
-        # Create a hash of the filename to avoid conflicts
-        file_hash = hashlib.md5(name.encode()).hexdigest()[:8]
-        timestamp = datetime.now().strftime('%Y/%m/%d')
-        return f"media/{timestamp}/{file_hash}_{name}"
+        # Keep the original structure but ensure it's organized
+        if not name.startswith('media/'):
+            name = f"media/{name}"
+        return name
     
     def _save(self, name, content):
         """Save file to GitHub repository"""
@@ -73,10 +73,9 @@ class GitHubStorage(Storage):
                 )
                 print(f"Created new file in GitHub: {file_path}")
             
-            # Return the GitHub URL as the file path
-            github_url = f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{file_path}"
-            print(f"File saved to GitHub: {github_url}")
-            return github_url
+            # Return the relative path for Django to store in database
+            print(f"File saved to GitHub: {file_path}")
+            return file_path
             
         except Exception as e:
             print(f"GitHub storage error: {e}")
