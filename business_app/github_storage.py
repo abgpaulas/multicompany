@@ -37,6 +37,7 @@ class GitHubStorage(Storage):
         """Save file to GitHub repository"""
         if not self.repo:
             # Fallback to local storage if GitHub is not configured
+            print("GitHub not configured, using local storage")
             return self._save_locally(name, content)
         
         try:
@@ -61,7 +62,8 @@ class GitHubStorage(Storage):
                     sha=file_obj.sha,
                     branch=self.branch
                 )
-            except:
+                print(f"Updated file in GitHub: {file_path}")
+            except Exception as e:
                 # File doesn't exist, create new one
                 self.repo.create_file(
                     path=file_path,
@@ -69,9 +71,12 @@ class GitHubStorage(Storage):
                     content=encoded_content,
                     branch=self.branch
                 )
+                print(f"Created new file in GitHub: {file_path}")
             
             # Return the GitHub URL as the file path
-            return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{file_path}"
+            github_url = f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{file_path}"
+            print(f"File saved to GitHub: {github_url}")
+            return github_url
             
         except Exception as e:
             print(f"GitHub storage error: {e}")
@@ -132,7 +137,12 @@ class GitHubStorage(Storage):
         """Return file URL"""
         if name.startswith('https://raw.githubusercontent.com/'):
             return name  # Already a full URL
-        return f"{settings.MEDIA_URL}{name}"
+        elif name.startswith('media/'):
+            # This is a GitHub path, construct the full URL
+            return f"https://raw.githubusercontent.com/{self.repo_name}/{self.branch}/{name}"
+        else:
+            # Local file
+            return f"{settings.MEDIA_URL}{name}"
     
     def size(self, name):
         """Get file size"""
