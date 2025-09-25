@@ -42,14 +42,15 @@ class QuotationTemplate(models.Model):
     
     class Meta:
         ordering = ['-created_at']
-        unique_together = ['user', 'name']
     
     def __str__(self):
-        return f"{self.name} - {self.user.get_full_name()}"
+        if self.user:
+            return f"{self.name} - {self.user.get_full_name()}"
+        return self.name
     
     def save(self, *args, **kwargs):
         # Ensure only one default template per user
-        if self.is_default:
+        if self.is_default and self.user:
             QuotationTemplate.objects.filter(user=self.user, is_default=True).update(is_default=False)
         super().save(*args, **kwargs)
 
@@ -115,7 +116,7 @@ class Quotation(models.Model):
             self.quotation_number = self.generate_quotation_number()
         
         # Set default values from company profile if not set
-        if not self.pk:  # Only for new quotations
+        if not self.pk and self.user:  # Only for new quotations with a user
             try:
                 company_profile = self.user.company_profile
                 if company_profile:

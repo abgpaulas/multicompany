@@ -9728,3 +9728,19 @@ INFO 2025-09-25 10:22:19,630 autoreload 6768 15768 C:\Users\CITY GRAPHIC\Desktop
 INFO 2025-09-25 10:22:19,859 autoreload 19216 9580 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\views.py changed, reloading.
 INFO 2025-09-25 10:22:21,751 autoreload 22828 7232 Watching for file changes with StatReloader
 INFO 2025-09-25 10:22:21,904 autoreload 8356 15444 Watching for file changes with StatReloader
+INFO 2025-09-25 10:31:03,378 autoreload 8356 15444 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:31:03,421 autoreload 22828 7232 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:31:05,963 autoreload 15372 23260 Watching for file changes with StatReloader
+INFO 2025-09-25 10:31:05,977 autoreload 7276 10512 Watching for file changes with StatReloader
+INFO 2025-09-25 10:31:57,960 autoreload 15372 23260 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:31:57,998 autoreload 7276 10512 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:32:00,186 autoreload 2712 9920 Watching for file changes with StatReloader
+INFO 2025-09-25 10:32:00,221 autoreload 22792 17316 Watching for file changes with StatReloader
+INFO 2025-09-25 10:32:07,969 autoreload 2712 9920 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:32:08,062 autoreload 22792 17316 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:32:10,004 autoreload 10076 11308 Watching for file changes with StatReloader
+INFO 2025-09-25 10:32:10,109 autoreload 14536 16644 Watching for file changes with StatReloader
+INFO 2025-09-25 10:32:17,762 autoreload 10076 11308 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:32:17,982 autoreload 14536 16644 C:\Users\CITY GRAPHIC\Desktop\multi_purpose_app updated3b\apps\quotations\models.py changed, reloading.
+INFO 2025-09-25 10:32:19,725 autoreload 6056 23344 Watching for file changes with StatReloader
+INFO 2025-09-25 10:32:19,959 autoreload 20396 972 Watching for file changes with StatReloader
